@@ -1,5 +1,6 @@
 import React from "react";
 import Colors from '../assets/Colors';
+import WillyHappy from '../assets/WillyHappy.svg';
 import Button from '../components/Button';
 
 const Login = () => {
@@ -9,7 +10,7 @@ const Login = () => {
       <div className="flex flex-col items-center mb-8 md:mb-12">
         <div className="flex items-center gap-3">
           <img
-            src="/wheel-disks-icon-logo-isolated-260nw-1921600658.png"
+            src={WillyHappy}
             alt="logo"
             className="w-12 h-12 md:w-24 md:h-24"
           />
