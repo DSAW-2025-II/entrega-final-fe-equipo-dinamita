@@ -20,9 +20,9 @@ const Button = ({
 
   // Define button sizes
   const sizes = {
-    small: 'text-sm py-1 px-4',
-    medium: 'text-[20px] md:text-3xl py-2 md:py-3 px-8 md:px-12',
-    large: 'text-xl md:text-4xl py-3 md:py-4 px-10 md:px-16',
+    small: "px-3 py-1 text-sm",
+    medium: "py-1.5 lg:py-2 px-3 lg:px-5 text-lg lg:text-3xl rounded-full",
+    large: "px-10 py-4 text-xl",
   };
 
   // Base classes
