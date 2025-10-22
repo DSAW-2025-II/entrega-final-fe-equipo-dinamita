@@ -1,10 +1,27 @@
-import React from "react";
+import React, { use } from "react";
 
 import Button from "../components/Button";
 
 
 export default function Register() {
+  const[name, setName] = useState("");
+  const[lastName, setLastName] = useState("");
+  const[universityID, setUniversityID] = useState("");
+  const[contactNumber, setContactNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const validate = () => {
+    if(!name || !lastName || !universityID || !contactNumber || !email || !password){
+      setError ("Por favor, complete todos los campos.");
+      return false;
+    }
+  }
+
+
   return (
+
     <div className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden">
 
       {/* Título */}

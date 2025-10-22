@@ -8,7 +8,6 @@ import TopButtons from "../components/TopButtons";
 export default function Home() { 
   return ( 
   <div className="w-screen h-screen bg-black flex flex-col items-center justify-start text-white font-inter"> 
-  {/* LOGO (espacio reservado) */} 
   {/* TÍTULO */} 
   <Tittle 
     variant="primary" 
