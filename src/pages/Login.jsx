@@ -2,8 +2,11 @@ import React from "react";
 import Colors from '../assets/Colors';
 import WillyHappy from '../assets/WillyHappy.svg';
 import Button from '../components/Button';
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden">
       {/* Logo */}
@@ -42,11 +45,13 @@ const Login = () => {
           className="text-[12px] lg:text-[18px] text-white text-center mt-1"
           style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
           ¿No tienes cuenta?{" "}
-          <span
+          <button
             className="text-[#FEF801] hover:underline cursor-pointer"
+            onClick={( )=> navigate("/register")}
             style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
             Regístrate
-          </span>
+            
+          </button>
         </p>
 
       </div>
