@@ -29,7 +29,12 @@ const Login = () => {
     try {
       if (validateEmptyFields()) {
         const res = await api.post('/auth/login', formData);
-        console.log("Login exitoso:", res.data);
+        navigate('/home');
+        
+        const token = res.data.token;
+
+        localStorage.setItem("token", token);
+
         setErrors({});
       }
     } catch (error) {
@@ -60,17 +65,29 @@ const Login = () => {
     setErrors(prev => ({ ...prev, [name]: "" }));
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    };
+  };
+
   return (
-    <div className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden">
+    <div 
+      className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       {/* Logo */}
       <div className="flex flex-col items-center mb-6 lg:mb-8">
-        <div className="flex items-center gap-2 lg:gap-3">
+        <div className="flex items-center justify-center gap-2 lg:gap-3">
           <img
             src={WillyHappy}
             alt="logo"
-            className="w-10 h-10 lg:w-20 lg:h-20"
+            className="w-10 h-10 lg:w-20 lg:h-20 object-contain"
           />
-          <h1 className="text-2xl lg:text-4xl font-outfit">WHEELS</h1>
+          <h1 className="text-2xl lg:text-4xl font-outfit leading-none m-0">
+            WHEELS
+          </h1>
         </div>
         <h2 className="text-2xl lg:text-[40px] font-catamaran leading-none mt-2 lg:mt-4">
           Sabana
