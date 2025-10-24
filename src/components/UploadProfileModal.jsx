@@ -1,84 +1,120 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 
-const UploadProfileModal = ({ isOpen, onClose, onUpload }) => {
+const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+const UploadProfileModal = ({ isOpen, onClose, onUpload, onSkip }) => {
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState("");
+
   if (!isOpen) return null;
+
+  const validateAndSetFile = (file) => {
+    if (file && VALID_IMAGE_TYPES.includes(file.type)) {
+      setSelectedFile(file);
+      setError("");
+      const reader = new FileReader();
+      reader.onload = (e) => setPreviewUrl(e.target.result);
+      reader.readAsDataURL(file);
+      if (onUpload) onUpload(file);
+    } else {
+      setError("Debes subir una imagen válida (jpg, png o webp)");
+      setSelectedFile(null);
+      setPreviewUrl(null);
+    }
+  };
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    if (file && onUpload) {
-      onUpload(file);
-    }
+    validateAndSetFile(file);
   };
-
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
-    if (file && onUpload) {
-      onUpload(file);
-    }
+    validateAndSetFile(file);
   };
-
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
+  // Botón omitir
+  const handleSkip = () => {
+    onSkip && onSkip();
+  };
+
+  // Botón aceptar
+  const handleAccept = () => {
+    if (!selectedFile) {
+      setError("Primero debes subir una foto de perfil válida.");
+      return;
+    }
+    if (!VALID_IMAGE_TYPES.includes(selectedFile.type)) {
+      setError("Archivo inválido. Debe ser jpg, png o webp");
+      return;
+    }
+    setError("");
+    onClose && onClose();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      {/* Modal Container */}
-      <div className="relative w-[668px] h-[906px] bg-custom-beige border-[17px] border-custom-yellow rounded-78">
-        
-        {/* Botón Cerrar */}
-        <button 
-          onClick={onClose}
-          className="absolute w-18 h-18 top-[35px] right-[35px] text-black hover:opacity-70 transition-opacity"
-        >
-          <span className="material-symbols-outlined text-6xl">
-            close
-          </span>
-        </button>
-        
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+      <div className="relative bg-[#D8D8C0] w-[370px] md:w-[420px] rounded-[45px] border-[10px] border-[#fefa01] shadow-xl flex flex-col items-center px-5 pt-5 pb-8">
+
         {/* Título */}
-        <div className="absolute w-[620px] h-[85px] left-[24px] top-[127px] bg-custom-yellow rounded-52 flex items-center justify-center">
-          <h1 className="text-black font-bold text-[54px] leading-[65px] text-center">
+        <div className="w-full flex justify-center mb-3">
+          <span className="bg-[#fefa01] rounded-full px-5 py-2 text-black font-extrabold text-xl md:text-2xl">
             Sube tu foto de perfil
-          </h1>
-        </div>
-        
-        {/* Área de Subida */}
-        <div 
-          className="absolute w-[419px] h-[386px] left-[125px] top-[260px] bg-custom-dark-beige border-[7px] border-[#1B1B1B] rounded-23 flex items-center justify-center cursor-pointer hover:bg-custom-beige transition-colors"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onClick={() => document.getElementById('file-input').click()}
-        >
-          {/* Input de archivo oculto */}
-          <input
-            id="file-input"
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          
-          {/* Icono de Subida */}
-          <div className="text-[#1B1B1B] flex flex-col items-center">
-            <span className="material-symbols-outlined text-[234px]">
-              upload
-            </span>
-            <p className="text-2xl font-bold mt-4">Haz clic para subir</p>
-          </div>
-        </div>
-        
-        {/* Botón Aceptar */}
-        <button 
-          onClick={onClose}
-          className="absolute w-[294px] h-[88px] left-[187px] top-[751px] bg-custom-yellow rounded-52 flex items-center justify-center hover:bg-opacity-80 transition-all"
-        >
-          <span className="text-black font-bold text-[56px] leading-[68px]">
-            Aceptar
           </span>
-        </button>
+        </div>
+
+        {/* Área de upload y preview */}
+        <div className="flex flex-col items-center justify-center">
+          <div
+            className="w-[205px] h-[205px] bg-[#BBBCAB] rounded-[20px] border-4 border-black flex items-center justify-center cursor-pointer mb-4 overflow-hidden"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={() => document.getElementById('file-input').click()}
+            style={{ transition: 'background 0.2s' }}
+          >
+            <input
+              id="file-input"
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            {previewUrl ? (
+              <img src={previewUrl} alt="preview" className="object-cover w-full h-full" />
+            ) : (
+              <svg width="85" height="85" viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="85" height="85" rx="15" fill="none"/>
+                <path d="M42.5 63V28M42.5 28L28 42.5M42.5 28L57 42.5" stroke="#181818" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect x="18" y="60" width="49" height="6" rx="3" fill="#181818"/>
+              </svg>
+            )}
+          </div>
+          {/* Mensaje error */}
+          {error && (
+            <div className="text-[#FE0144] w-full text-center text-sm mb-2">{error}</div>
+          )}
+        </div>
+
+        {/* Botones Omitir y Aceptar */}
+        <div className="flex w-full justify-evenly mt-1">
+          <button
+            onClick={handleSkip}
+            className="bg-[#BBBCAB] text-black font-extrabold text-lg rounded-full px-7 py-2 shadow-inner border-2 border-black hover:bg-[#A0A090] focus:outline-none transition duration-150"
+          >
+            Omitir
+          </button>
+          <button
+            onClick={handleAccept}
+            className="bg-[#FEFA01] text-black font-extrabold text-lg rounded-full px-7 py-2 border-2 border-[#FEFA01] hover:bg-[#EFEA10] shadow-inner focus:outline-none transition duration-150"
+          >
+            Aceptar
+          </button>
+        </div>
       </div>
     </div>
   );
