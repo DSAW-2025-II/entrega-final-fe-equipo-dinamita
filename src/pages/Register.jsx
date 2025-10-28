@@ -3,8 +3,11 @@ import RegisterCard from "../components/RegisterCard";
 import UploadProfileModal from "../components/UploadProfileModal.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
 import api from "../api/axios.js";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userFormData, setUserFormData] = useState(null); 
   const [errorMessages, setErrorMessages] = useState([]); // Para mostrar mensajes error modal
@@ -23,7 +26,7 @@ export default function Register() {
       if (res.data.success) {
         setIsModalOpen(false);
         setUserFormData(null);
-        window.location.href = "/login";
+        navigate("/login");
       } else {
         // Si el backend retorna errores conocidos, muestra en el modal visual
         let msgs = [];
