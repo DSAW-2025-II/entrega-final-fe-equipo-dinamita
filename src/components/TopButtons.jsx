@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import HomeLogo from "../assets/HomeLogo.svg";
 import NavLogo from "../assets/NavLogo.svg";
+import { useNavigate } from "react-router-dom";
+
 
 export default function TopButtons() {
   const [isNavOpen, setIsNavOpen] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div className="z-50">
       {/* Overlay oscuro */}
@@ -39,13 +41,20 @@ export default function TopButtons() {
 
         {/* Contenido del menú */}
         <ul className="flex flex-col gap-4 px-6 font-semibold text-xl">
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer">
+          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/profile")}>
             Tu perfil
           </li>
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer">
+          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/reservations")}>
             Mis reservas
           </li>
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer">
+          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+           onClick={() => navigate("/beDriver")}>
+            Sé conductor
+          </li>
+          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/cash")}>
             Dinero
           </li>
         </ul>

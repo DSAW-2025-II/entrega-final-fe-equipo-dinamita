@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Home from './pages/Home.jsx';
+import Profile from './pages/Profile.jsx';
+import Reservations from './pages/Reservations.jsx';
+import beDriver from './pages/beDriver.jsx';
+import Cash from './pages/Cash.jsx';
 
 const App = () => {
     return (
