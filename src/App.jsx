@@ -6,8 +6,8 @@ import Register from './pages/Register.jsx';
 import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
 import Reservations from './pages/Reservations.jsx';
-import beDriver from './pages/beDriver.jsx';
-import Cash from './pages/Cash.jsx';
+//import beDriver from './pages/beDriver.jsx';
+
 
 const App = () => {
     return (
@@ -18,6 +18,10 @@ const App = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/reservations" element={<Reservations />} />
+                    {/*<Route path="/beDriver" element={<beDriver />} />*/}
+                    
                     
                 </Routes>
             </div>
