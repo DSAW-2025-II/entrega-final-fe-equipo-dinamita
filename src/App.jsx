@@ -4,6 +4,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Home from './pages/Home.jsx';
+import Profile from './pages/Profile.jsx';
+import Reservations from './pages/Reservations.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+//import beDriver from './pages/beDriver.jsx';
+
 
 const App = () => {
     return (
@@ -13,7 +18,15 @@ const App = () => {
                     <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/home" element={<Home />} />
+                    <Route path="/home" element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/reservations" element={<Reservations />} />
+                    {/*<Route path="/beDriver" element={<beDriver />} />*/}
+                    
                     
                 </Routes>
             </div>
