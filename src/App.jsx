@@ -1,32 +1,36 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Home from './pages/Home.jsx';
-import Profile from './pages/Profile.jsx';
-import Reservations from './pages/Reservations.jsx';
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Home from "./pages/Home.jsx";
+import Profile from "./pages/Profile.jsx";
+import Reservations from "./pages/Reservations.jsx";
 //import beDriver from './pages/beDriver.jsx';
-
+import UpdateProfile from "./pages/UpdateProfile.jsx";
 
 const App = () => {
-    return (
-        <Router>
-            <div>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/login" replace />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/reservations" element={<Reservations />} />
-                    {/*<Route path="/beDriver" element={<beDriver />} />*/}
-                    
-                    
-                </Routes>
-            </div>
-        </Router>
-    );
+  return (
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/reservations" element={<Reservations />} />
+          {/*<Route path="/beDriver" element={<beDriver />} />*/}
+            <Route path="/updateProfile" element={<UpdateProfile />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 };
 
 export default App;

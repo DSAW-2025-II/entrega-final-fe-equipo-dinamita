@@ -1,14 +1,14 @@
 import React from "react";
 
-const Tittle = ({ 
-  children, 
-  onClick, 
+const Tittle = ({
+  children,
+  onClick,
   variant = "primary",
   size = "medium",
-  className = "", 
+  className = "",
   disabled = false,
   type = "button",
-  ...props 
+  ...props
 }) => {
   const variants = {
     primary: "bg-[#FEF801] text-[#1B1B1B]",

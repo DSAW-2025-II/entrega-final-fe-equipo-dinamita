@@ -3,7 +3,6 @@ import HomeLogo from "../assets/HomeLogo.svg";
 import NavLogo from "../assets/NavLogo.svg";
 import { useNavigate } from "react-router-dom";
 
-
 export default function TopButtons() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +28,7 @@ export default function TopButtons() {
             src={HomeLogo}
             alt="Home"
             className="w-10 h-10 lg:w-12 lg:h-12 cursor-pointer transition-transform duration-200 hover:scale-110 brightness-0"
-            onClick={() => navigate('/home')}
+            onClick={() => navigate("/home")}
           />
           <img
             src={NavLogo}
@@ -41,19 +40,24 @@ export default function TopButtons() {
 
         {/* Contenido del menú */}
         <ul className="flex flex-col gap-4 px-6 font-semibold text-xl">
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/profile")}>
+          <li
+            className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/profile")}
+          >
             Tu perfil
           </li>
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/reservations")}>
+          <li
+            className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/reservations")}
+          >
             Mis reservas
           </li>
-          <li className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-           onClick={() => navigate("/beDriver")}>
+          <li
+            className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+            onClick={() => navigate("/beDriver")}
+          >
             Sé conductor
           </li>
-          
         </ul>
 
         <button
@@ -71,7 +75,7 @@ export default function TopButtons() {
             src={HomeLogo}
             alt="Home"
             className="w-10 h-10 lg:w-12 lg:h-12 cursor-pointer transition-transform duration-200 hover:scale-110 hover:opacity-80"
-            onClick={() => navigate('/home')}
+            onClick={() => navigate("/home")}
           />
           <img
             src={NavLogo}

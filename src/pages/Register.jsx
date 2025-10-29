@@ -9,12 +9,12 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userFormData, setUserFormData] = useState(null); 
+  const [userFormData, setUserFormData] = useState(null);
   const [errorMessages, setErrorMessages] = useState([]); // Para mostrar mensajes error modal
 
   // Handler cuando el RegisterCard valida todo OK
   const handleRegisterSuccess = (formValues) => {
-    setUserFormData(formValues); 
+    setUserFormData(formValues);
     setIsModalOpen(true);
   };
 
@@ -22,7 +22,7 @@ export default function Register() {
   const handleModalSkip = async () => {
     if (!userFormData) return;
     try {
-      const res = await api.post('auth/users/register', userFormData);
+      const res = await api.post("auth/users/register", userFormData);
       if (res.data.success) {
         setIsModalOpen(false);
         setUserFormData(null);
@@ -31,11 +31,14 @@ export default function Register() {
         // Si el backend retorna errores conocidos, muestra en el modal visual
         let msgs = [];
         if (res.data.errors) {
-          if (res.data.errors.universityId) msgs.push(res.data.errors.universityId);
+          if (res.data.errors.universityId)
+            msgs.push(res.data.errors.universityId);
           if (res.data.errors.email) msgs.push(res.data.errors.email);
         }
         setIsModalOpen(false);
-        setErrorMessages(msgs.length > 0 ? msgs : ["Error de registro. Intenta de nuevo."]);
+        setErrorMessages(
+          msgs.length > 0 ? msgs : ["Error de registro. Intenta de nuevo."],
+        );
       }
     } catch (error) {
       // Error de red o estructura inesperada
@@ -45,7 +48,8 @@ export default function Register() {
         if (backendErrors.universityId) msgs.push(backendErrors.universityId);
         if (backendErrors.email) msgs.push(backendErrors.email);
       }
-      if (msgs.length === 0) msgs.push("No se pudo completar el registro. Intenta de nuevo.");
+      if (msgs.length === 0)
+        msgs.push("No se pudo completar el registro. Intenta de nuevo.");
       setIsModalOpen(false);
       setErrorMessages(msgs);
     }

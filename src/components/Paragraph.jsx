@@ -3,13 +3,12 @@ import React from "react";
 const Paragraph = ({
   children,
   size = "medium",
+  color = "text-[#FEF801]", // color por defecto (amarillo)
   className = "",
   ...props
 }) => {
-  
-  const baseClasses = "text-[#FEF801] font-bold inline-block";
+  const baseClasses = "font-bold inline-block";
 
-  
   const sizes = {
     small: "text-sm",
     semi: "text-lg",
@@ -21,6 +20,7 @@ const Paragraph = ({
   const paragraphClasses = `
     ${baseClasses}
     ${sizes[size]}
+    ${color}
     ${className}
   `.trim();
 

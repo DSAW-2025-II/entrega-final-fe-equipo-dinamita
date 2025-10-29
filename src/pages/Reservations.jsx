@@ -1,9 +1,10 @@
 import React from "react";
-import Tittle from "../components/Tittle"; 
+import Tittle from "../components/Tittle";
 import TopButtons from "../components/TopButtons";
 
 export default function Reservations() {
-    return(<div className="w-screen h-screen bg-black flex items-center justify-start text-white font-inter">
+  return (
+    <div className="w-screen h-screen bg-black flex items-center justify-start text-white font-inter">
       {/* TÍTULO */}
       <Tittle
         variant="primary"
@@ -13,8 +14,8 @@ export default function Reservations() {
         Mis reservas
       </Tittle>
 
-     {/* options */} 
-    <TopButtons />
-
-    </div>);
+      {/* options */}
+      <TopButtons />
+    </div>
+  );
 }

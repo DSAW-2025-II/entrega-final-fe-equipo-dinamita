@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Colors from '../assets/Colors';
-import WillyHappy from '../assets/WillyHappy.svg';
-import Button from '../components/Button';
+import Colors from "../assets/Colors";
+import WillyHappy from "../assets/WillyHappy.svg";
+import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
 
@@ -28,9 +28,9 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       if (validateEmptyFields()) {
-        const res = await api.post('/auth/login', formData);
-        navigate('/home');
-        
+        const res = await api.post("/auth/login", formData);
+        navigate("/home");
+
         const token = res.data.token;
 
         localStorage.setItem("token", token);
@@ -48,31 +48,32 @@ const Login = () => {
         const newErrors = {};
         Object.entries(backendErrors).forEach(([key, val]) => {
           if (Array.isArray(val)) newErrors[key] = val.join(", ");
-          else if (val && typeof val === "object") newErrors[key] = val.message || JSON.stringify(val);
+          else if (val && typeof val === "object")
+            newErrors[key] = val.message || JSON.stringify(val);
           else newErrors[key] = String(val);
         });
-        setErrors(prev => ({ ...prev, ...newErrors }));
-      } 
+        setErrors((prev) => ({ ...prev, ...newErrors }));
+      }
 
       console.error(error);
     }
-  }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     // limpiar error específico al escribir
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
-    };
+    }
   };
 
   return (
-    <div 
+    <div
       className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden"
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -109,7 +110,9 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
             className={`w-[240px] lg:w-[360px] h-[38px] lg:h-[60px] rounded-full px-4 lg:px-6 text-[14px] lg:text-[20px] text-[#1b1b1b] placeholder-[#A2A18A] bg-white shadow-md focus:outline-none transition-all font-medium ${
-              errors.email ? "border-b-[3px] border-[#FE0144]" : "border-b-[3px] border-transparent"
+              errors.email
+                ? "border-b-[3px] border-[#FE0144]"
+                : "border-b-[3px] border-transparent"
             }`}
           />
           {errors.email && (
@@ -127,7 +130,9 @@ const Login = () => {
             value={formData.password}
             onChange={handleChange}
             className={`w-[240px] lg:w-[360px] h-[38px] lg:h-[60px] rounded-full px-4 lg:px-6 text-[14px] lg:text-[20px] text-[#1b1b1b] placeholder-[#A2A18A] bg-white shadow-md focus:outline-none transition-all font-medium ${
-              errors.password ? "border-b-[3px] border-[#FE0144]" : "border-b-[3px] border-transparent"
+              errors.password
+                ? "border-b-[3px] border-[#FE0144]"
+                : "border-b-[3px] border-transparent"
             }`}
           />
           {errors.password && (
@@ -148,12 +153,14 @@ const Login = () => {
 
         <p
           className="text-[12px] lg:text-[18px] text-white text-center mt-1"
-          style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
+          style={{ textShadow: "0 0 6px rgba(0,0,0,0.8)" }}
+        >
           ¿No tienes cuenta?{" "}
           <button
             className="text-[#FEF801] hover:underline cursor-pointer"
             onClick={() => navigate("/register")}
-            style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
+            style={{ textShadow: "0 0 6px rgba(0,0,0,0.8)" }}
+          >
             Regístrate
           </button>
         </p>
@@ -170,6 +177,6 @@ const Login = () => {
       </Button>
     </div>
   );
-}
+};
 
 export default Login;
