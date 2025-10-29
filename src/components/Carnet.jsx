@@ -55,7 +55,7 @@ const navigate = useNavigate();
         variant="primary"
         size="medium"
         className="mt-10 ml-7"
-        onClick={() => navigate("/updateProfile")}
+        
       >
         Actualizar perfil
       </Button>

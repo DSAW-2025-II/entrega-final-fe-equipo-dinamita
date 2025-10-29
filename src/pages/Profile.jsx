@@ -30,7 +30,7 @@ export default function Profile() {
 
       {/* CONTENEDOR DE PERFIL */}
       <div className="ml-10 mt-2 flex flex-col items-start space-y-4">
-        {/* Aquí colocas tu carnet */}
+        {/* Info carnet */}
         <Carnet
           name="[name]"
           lastName="[lastName]"
