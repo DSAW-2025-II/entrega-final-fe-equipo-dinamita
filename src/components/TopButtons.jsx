@@ -1,9 +1,42 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HomeLogo from "../assets/HomeLogo.svg";
 import NavLogo from "../assets/NavLogo.svg";
+import api from "../api/axios.js";
 
 export default function TopButtons() {
+  const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Call the logout endpoint with the JWT token in the Authorization header
+      await api.post("/auth/logout", {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Remove the JWT token from localStorage
+      localStorage.removeItem("token");
+      
+      // Redirect to login page
+      navigate("/login");
+      
+      // Close the navigation menu
+      setIsNavOpen(false);
+    } catch (error) {
+      console.error("❌ Logout error:", error);
+      
+      // Even if there's an error, remove the token and redirect
+      // This ensures the user can always log out
+      localStorage.removeItem("token");
+      navigate("/login");
+      setIsNavOpen(false);
+    }
+  };
 
   return (
     <div className="z-50">
@@ -51,7 +84,7 @@ export default function TopButtons() {
         </ul>
 
         <button
-          onClick={() => setIsNavOpen(false)}
+          onClick={handleLogout}
           className="mt-auto bg-black text-yellow-300 font-medium text-lg py-3 mx-6 mb-6 rounded-3xl hover:bg-gray-900 transition"
         >
           Cerrar sesión
