@@ -1,4 +1,4 @@
-export function beDriver() {
+export function BeDriver() {
     return (
         <div>
             beDriver Page

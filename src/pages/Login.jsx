@@ -3,6 +3,7 @@ import Colors from '../assets/Colors';
 import WillyHappy from '../assets/WillyHappy.svg';
 import Button from '../components/Button';
 import LoadingModal from '../components/LoadingModal';
+import SuccessModal from '../components/SuccessModal';
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
 
@@ -17,6 +18,7 @@ const Login = () => {
   // inicializar como objeto
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const validateEmptyFields = () => {
     let newErrors = {};
@@ -36,8 +38,8 @@ const Login = () => {
         const token = res.data.token;
         localStorage.setItem("token", token);
         
-        navigate('/home');
         setErrors({});
+        setIsSuccess(true);
       }
     } catch (error) {
       // si backend devuelve errores por campo: response.data.errors -> { email: "...", password: "..." }
@@ -78,6 +80,7 @@ const Login = () => {
   return (
     <>
       {isLoading && <LoadingModal message="Iniciando sesión..." />}
+      {isSuccess && <SuccessModal message={"¡Login exitoso!"} onClose={()=>{setIsSuccess(false); navigate('/home')}} />}
       <div 
       className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden"
       onKeyDown={handleKeyDown}
