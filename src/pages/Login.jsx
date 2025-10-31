@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import Colors from "../assets/Colors";
-import WillyHappy from "../assets/WillyHappy.svg";
-import Button from "../components/Button";
+import Colors from '../assets/Colors';
+import WillyHappy from '../assets/WillyHappy.svg';
+import Button from '../components/Button';
+import LoadingModal from '../components/LoadingModal';
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
 
@@ -15,6 +16,7 @@ const Login = () => {
 
   // inicializar como objeto
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmptyFields = () => {
     let newErrors = {};
@@ -28,13 +30,13 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       if (validateEmptyFields()) {
-        const res = await api.post("/auth/login", formData);
-        navigate("/home");
-
+        setIsLoading(true);
+        const res = await api.post('/auth/login', formData);
+        
         const token = res.data.token;
-
         localStorage.setItem("token", token);
-
+        
+        navigate('/home');
         setErrors({});
       }
     } catch (error) {
@@ -56,6 +58,8 @@ const Login = () => {
       }
 
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,7 +77,9 @@ const Login = () => {
   };
 
   return (
-    <div
+    <>
+      {isLoading && <LoadingModal message="Iniciando sesión..." />}
+      <div 
       className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden"
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -176,6 +182,7 @@ const Login = () => {
         Ingresar
       </Button>
     </div>
+    </>
   );
 };
 
