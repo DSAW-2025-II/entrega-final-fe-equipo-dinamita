@@ -1,20 +1,23 @@
 import React from "react"; 
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
-import HomeLogo from "../assets/HomeLogo.svg"; 
-import NavLogo from "../assets/NavLogo.svg"; 
 import TopButtons from "../components/TopButtons"; 
 import TravelCard from "../components/TravelCard";
 
 export default function Home() { 
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user.name;
+
   return ( 
-  <div className="w-screen h-screen bg-black flex items-center justify-start text-white font-inter"> 
+  <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
   {/* TÍTULO */} 
+  <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-10 px-2">
   <Tittle 
     variant="primary" 
     size="extraLarge" 
     className="self-start ml-10 mt-6" > 
-    ¡Hola, [nombreUsuario]!
+    ¡Hola, {userName}!
   </Tittle> 
     
   {/* BOTÓN */} 
@@ -27,6 +30,8 @@ export default function Home() {
     
   {/* options */} 
     <TopButtons />
+  </div>
+  
 
  
     <div>

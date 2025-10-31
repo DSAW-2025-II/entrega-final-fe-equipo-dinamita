@@ -7,7 +7,7 @@ import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
 import Reservations from './pages/Reservations.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-//import beDriver from './pages/beDriver.jsx';
+import BeDriver from './pages/beDriver.jsx';
 
 
 const App = () => {
@@ -25,7 +25,7 @@ const App = () => {
                     } />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/reservations" element={<Reservations />} />
-                    {/*<Route path="/beDriver" element={<beDriver />} />*/}
+                    <Route path="/be-driver" element={<BeDriver />} />
                     
                     
                 </Routes>
