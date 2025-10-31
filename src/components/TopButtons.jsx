@@ -87,7 +87,7 @@ export default function TopButtons() {
           </li>
           <li
             className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/beDriver")}
+            onClick={() => navigate("/be-driver")}
           >
             Sé conductor
           </li>

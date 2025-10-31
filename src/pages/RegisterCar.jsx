@@ -15,7 +15,7 @@ export default function BeDriver() {
       {/* Tarjetas alineadas tipo row */}
       <div className="flex flex-col items-center lg:flex-row justify-center gap-y-8 lg:gap-x-12 w-full max-w-6xl mx-auto mb-8">
         {/* Tarjeta izquierda: Datos básicos vehículo */}
-        <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-6 px-3 w-[90vw] max-w-[410px] mx-auto">
+        <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-6 px-3 w-[90vw] max-w-[390px] mx-auto">
           <Tittle size="semi" className="bg-[#FEF801] px-9 py-2 mb-4 text-black">PLACA</Tittle>
           {/* Casillas placa */}
           <div className="flex gap-2 mb-6 mt-1">
@@ -32,19 +32,19 @@ export default function BeDriver() {
           {/* Inputs */}
           <input
             type="number"
-            className="w-full rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-4 shadow font-medium border-none focus:outline-none"
+            className="w-11/12 rounded-full py-2 px-3 text-lg bg-white placeholder-[#bab9a0] mb-4 shadow font-medium border-none focus:outline-none"
             placeholder="Capacidad de pasajeros"
             disabled
           />
           <input
             type="text"
-            className="w-full rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-4 shadow font-medium border-none focus:outline-none"
+            className="w-11/12 rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-4 shadow font-medium border-none focus:outline-none"
             placeholder="Marca"
             disabled
           />
           <input
             type="text"
-            className="w-full rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-2 shadow font-medium border-none focus:outline-none"
+            className="w-11/12 rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-2 shadow font-medium border-none focus:outline-none"
             placeholder="Modelo"
             disabled
           />

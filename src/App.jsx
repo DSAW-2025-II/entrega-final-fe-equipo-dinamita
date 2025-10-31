@@ -12,8 +12,9 @@ import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
 import Reservations from './pages/Reservations.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import BeDriver from './pages/beDriver.jsx';
+import BeDriver from './pages/RegisterCar.jsx';
 import UpdateProfile from './pages/UpdateProfile.jsx';
+import RegisterCar from "./pages/RegisterCar.jsx";
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/reservations" element={<Reservations />} />
                     <Route path="/be-driver" element={<BeDriver />} />
                     <Route path="/update-profile" element={<UpdateProfile />} />
+                    <Route path="/register-car" element={<RegisterCar />} />
                     
                 </Routes>
             </div>
