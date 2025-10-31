@@ -2,6 +2,7 @@ import React from "react";
 import Paragraph from "../components/Paragraph";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import Picture from "./Picture";
 
 export default function Carnet({ name, lastName, id, email, number, photo }) {
 const navigate = useNavigate();
@@ -10,18 +11,8 @@ const navigate = useNavigate();
       {/* CONTENEDOR PRINCIPAL: FOTO + INFO */}
       <div className="flex items-start space-x-6">
         {/* FOTO */}
-        <div className="w-40 h-40 bg-[#FEF801] rounded-md overflow-hidden flex-shrink-0">
-          {photo ? (
-            <img
-              src={photo}
-              alt="Tu foto"
-              className="object-cover w-full h-full"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-black text-sm font-semibold">
-              Sin foto
-            </div>
-          )}
+        <div className="w-40 h-40 bg- overflow-hidden flex-shrink-0">
+          <Picture photo={photo} />
         </div>
 
         {/* INFORMACIÓN */}
@@ -55,7 +46,7 @@ const navigate = useNavigate();
         variant="primary"
         size="medium"
         className="mt-10 ml-7"
-        onClick={() => navigate("/updateProfile")}
+        onClick={() => navigate("/update-profile")}
       >
         Actualizar perfil
       </Button>

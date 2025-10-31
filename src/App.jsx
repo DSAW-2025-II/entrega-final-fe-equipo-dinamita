@@ -13,6 +13,7 @@ import Profile from './pages/Profile.jsx';
 import Reservations from './pages/Reservations.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import BeDriver from './pages/beDriver.jsx';
+import UpdateProfile from './pages/UpdateProfile.jsx';
 
 
 const App = () => {
@@ -31,7 +32,7 @@ const App = () => {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/reservations" element={<Reservations />} />
                     <Route path="/be-driver" element={<BeDriver />} />
-                    
+                    <Route path="/update-profile" element={<UpdateProfile />} />
                     
                 </Routes>
             </div>

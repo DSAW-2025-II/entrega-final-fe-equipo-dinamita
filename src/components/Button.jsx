@@ -22,6 +22,8 @@ const Button = ({
   // Define button sizes
   const sizes = {
     small: "px-3 py-1 text-sm",
+    smallPlus: "px-3 py-1 text-lg font-bold",
+    semi: "px-4 py-1.5 text-base lg:text-2xl rounded-full",
     medium: "py-1.5 lg:py-2 px-3 lg:px-5 text-lg lg:text-3xl rounded-full",
     modal: "px-7 py-2 text-lg rounded-full font-extrabold",
     large: "px-10 py-4 text-xl",

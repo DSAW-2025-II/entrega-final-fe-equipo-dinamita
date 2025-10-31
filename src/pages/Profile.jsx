@@ -20,7 +20,7 @@ export default function Profile() {
         {/* BOTONES DE ARRIBA */}
         <TopButtons />
         </div>
-
+        <div className="ml-8">
         <Paragraph
         variant="primary"
         size="medium"
@@ -40,6 +40,7 @@ export default function Profile() {
           photo="/perfil.png"
         />
       </div>
+    </div>
     </div>
   );
 }
