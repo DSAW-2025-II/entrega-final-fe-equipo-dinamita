@@ -7,7 +7,7 @@ const VALID_IMAGE_TYPES = [
   "image/webp",
 ];
 
-const UploadProfileModal = ({ isOpen, onClose, onUpload, onSkip }) => {
+const UploadProfileModal = ({ isOpen, onUpload, onSkip }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState("");
@@ -21,7 +21,7 @@ const UploadProfileModal = ({ isOpen, onClose, onUpload, onSkip }) => {
       const reader = new FileReader();
       reader.onload = (e) => setPreviewUrl(e.target.result);
       reader.readAsDataURL(file);
-      if (onUpload) onUpload(file);
+      // ELIMINADO: if (onUpload) onUpload(file);
     } else {
       setError("Debes subir una imagen válida (jpg, png o webp)");
       setSelectedFile(null);
@@ -58,7 +58,7 @@ const UploadProfileModal = ({ isOpen, onClose, onUpload, onSkip }) => {
       return;
     }
     setError("");
-    onClose && onClose();
+    onUpload && onUpload(selectedFile); // Enviar la imagen al padre
   };
 
   return (

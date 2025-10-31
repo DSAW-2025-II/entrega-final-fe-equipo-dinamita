@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import RegisterCard from "../components/RegisterCard";
 import UploadProfileModal from "../components/UploadProfileModal.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
+import SuccessModal from "../components/SuccessModal";
+import LoadingModal from "../components/LoadingModal";
 import api from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +13,8 @@ export default function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userFormData, setUserFormData] = useState(null);
   const [errorMessages, setErrorMessages] = useState([]); // Para mostrar mensajes error modal
+  const [isLoading, setIsLoading] = useState(false); // loading para registro
+  const [isSuccess, setIsSuccess] = useState(false); // modal de éxito
 
   // Handler cuando el RegisterCard valida todo OK
   const handleRegisterSuccess = (formValues) => {
@@ -21,14 +25,15 @@ export default function Register() {
   // Handler omitir (subir datos a db sin foto)
   const handleModalSkip = async () => {
     if (!userFormData) return;
+    setIsLoading(true);
     try {
       const res = await api.post("auth/users/register", userFormData);
       if (res.data.success) {
         setIsModalOpen(false);
         setUserFormData(null);
-        navigate("/login");
+        setIsSuccess(true); // mostrar modal de éxito
+        
       } else {
-        // Si el backend retorna errores conocidos, muestra en el modal visual
         let msgs = [];
         if (res.data.errors) {
           if (res.data.errors.universityId)
@@ -41,7 +46,6 @@ export default function Register() {
         );
       }
     } catch (error) {
-      // Error de red o estructura inesperada
       let msgs = [];
       const backendErrors = error.response?.data?.errors;
       if (backendErrors) {
@@ -52,15 +56,56 @@ export default function Register() {
         msgs.push("No se pudo completar el registro. Intenta de nuevo.");
       setIsModalOpen(false);
       setErrorMessages(msgs);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Handler aceptar (por ahora deshabilitado/no hace nada)
-  const handleModalAccept = async () => {
-    alert("La funcionalidad de subir foto estará disponible pronto.");
+  // Handler para aceptar con foto
+  const handleModalPhotoUpload = async (file) => {
+    if (!userFormData) return;
+    setIsLoading(true);
+    const toBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    };
+
+    try {
+      const base64Photo = await toBase64(file); // string completa: data:image/jpg;base64,...
+      const res = await api.post('auth/users/register', { ...userFormData, photo: base64Photo });
+      if (res.data.success) {
+        setIsModalOpen(false);
+        setUserFormData(null);
+        setIsSuccess(true);
+        
+      } else {
+        let msgs = [];
+        if (res.data.errors) {
+          if (res.data.errors.universityId) msgs.push(res.data.errors.universityId);
+          if (res.data.errors.email) msgs.push(res.data.errors.email);
+        }
+        setIsModalOpen(false);
+        setErrorMessages(msgs.length > 0 ? msgs : ["Error de registro. Intenta de nuevo."]);
+      }
+    } catch (error) {
+      let msgs = [];
+      const backendErrors = error.response?.data?.errors;
+      if (backendErrors) {
+        if (backendErrors.universityId) msgs.push(backendErrors.universityId);
+        if (backendErrors.email) msgs.push(backendErrors.email);
+      }
+      if (msgs.length === 0) msgs.push("No se pudo completar el registro. Intenta de nuevo.");
+      setIsModalOpen(false);
+      setErrorMessages(msgs);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Cerrar modal de error: vuelve a mostrar form register
   const handleErrorModalClose = () => {
     setErrorMessages([]);
     setUserFormData(null);
@@ -72,7 +117,8 @@ export default function Register() {
       <div className="bg-[#FEF801] text-[#1B1B1B] font-bold text-lg lg:text-3xl py-2 px-5 lg:px-6 rounded-full mb-2">
         Crea tu Cuenta
       </div>
-
+      {isLoading && <LoadingModal message="Procesando registro..." />}
+      {isSuccess && <SuccessModal message={"¡Registro exitoso!"} onClose={()=>{setIsSuccess(false); navigate('/login')}} />}
       {errorMessages.length > 0 ? (
         <ErrorModal messages={errorMessages} onClose={handleErrorModalClose} />
       ) : !isModalOpen ? (
@@ -80,7 +126,7 @@ export default function Register() {
       ) : (
         <UploadProfileModal
           isOpen={isModalOpen}
-          onClose={handleModalAccept}
+          onUpload={handleModalPhotoUpload}
           onSkip={handleModalSkip}
         />
       )}
