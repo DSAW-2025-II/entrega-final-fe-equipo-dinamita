@@ -27,7 +27,16 @@ export default function Register() {
     if (!userFormData) return;
     setIsLoading(true);
     try {
-      const res = await api.post("auth/users/register", userFormData);
+      // Crear FormData (sin archivo)
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", userFormData.name);
+      formDataToSend.append("lastName", userFormData.lastName);
+      formDataToSend.append("universityId", userFormData.universityId);
+      formDataToSend.append("email", userFormData.email);
+      formDataToSend.append("contactNumber", userFormData.contactNumber);
+      formDataToSend.append("password", userFormData.password);
+
+      const res = await api.post("auth/users/register", formDataToSend);
       if (res.data.success) {
         setIsModalOpen(false);
         setUserFormData(null);
@@ -65,18 +74,19 @@ export default function Register() {
   const handleModalPhotoUpload = async (file) => {
     if (!userFormData) return;
     setIsLoading(true);
-    const toBase64 = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-    };
 
     try {
-      const base64Photo = await toBase64(file); // string completa: data:image/jpg;base64,...
-      const res = await api.post('auth/users/register', { ...userFormData, photo: base64Photo });
+      // Crear FormData con archivo
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", userFormData.name);
+      formDataToSend.append("lastName", userFormData.lastName);
+      formDataToSend.append("universityId", userFormData.universityId);
+      formDataToSend.append("email", userFormData.email);
+      formDataToSend.append("contactNumber", userFormData.contactNumber);
+      formDataToSend.append("password", userFormData.password);
+      formDataToSend.append("photo", file); // Archivo directamente
+
+      const res = await api.post('auth/users/register', formDataToSend);
       if (res.data.success) {
         setIsModalOpen(false);
         setUserFormData(null);

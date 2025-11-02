@@ -37,8 +37,7 @@ const Login = () => {
         
         const token = res.data.token;
         localStorage.setItem("token", token);
-
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Ya no guardamos el usuario en localStorage, se obtiene desde la API
         
         setErrors({});
         setIsSuccess(true);

@@ -4,13 +4,22 @@ import Tittle from "../components/Tittle";
 import TopButtons from "../components/TopButtons"; 
 import TravelCard from "../components/TravelCard";
 import FilterModal from "../components/FilterModal";
+import LoadingModal from "../components/LoadingModal";
+import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
-
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, isLoading } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
-  const userName = user.name;
   const toggleFilter = () => setOpenFilter((prev) => !prev);
+
+  // Mostrar loading mientras se obtienen los datos
+  if (isLoading || !user) {
+    return (
+      <div className="w-screen h-screen bg-black flex items-center justify-center">
+        <LoadingModal message="Cargando..." />
+      </div>
+    );
+  }
 
   return ( 
   <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
@@ -20,7 +29,7 @@ export default function Home() {
     variant="primary" 
     size="extraLarge" 
     className="self-start ml-10 mt-6" > 
-    ¡Hola, {userName}!
+    ¡Hola, {user.name}!
   </Tittle> 
     
   {/* BOTÓN */} 
