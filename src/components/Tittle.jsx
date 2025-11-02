@@ -17,7 +17,7 @@ const Tittle = ({
 
   const sizes = {
     small: "px-3 py-1 text-sm",
-    semi: "px-4 py-1 text-lg",
+    semi: "px-4 py-1 text-xl",
     medium: "py-1.5 lg:py-2 px-3 lg:px-5 text-lg lg:text-3xl rounded-full",
     large: "px-10 py-4 text-xl",
     extraLarge:

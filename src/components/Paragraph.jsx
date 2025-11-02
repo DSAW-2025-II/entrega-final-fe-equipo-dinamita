@@ -14,7 +14,7 @@ const Paragraph = ({
     semi: "text-lg",
     medium: "text-lg lg:text-3xl",
     large: "text-xl",
-    extraLarge: "text-lg lg:text-3xl mb-6 lg:mb-3",
+    extraLarge: "text-lg lg:text-6xl mb-6 lg:mb-3",
   };
 
   const paragraphClasses = `

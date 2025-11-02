@@ -4,8 +4,11 @@ import TopButtons from "../components/TopButtons";
 import Paragraph from "../components/Paragraph";
 import Button from "../components/Button";
 import Carnet from "../components/Carnet";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const navigate = useNavigate();
+
   return (
     <div className="w-screen h-screen bg-black flex flex-col text-white font-inter">
       {/* TÍTULO */}
@@ -40,6 +43,15 @@ export default function Profile() {
           photo="/perfil.png"
         />
       </div>
+      {/* BOTÓN */}
+      <Button
+        variant="primary"
+        size="medium"
+        className="mt-10 ml-7"
+        onClick={() => navigate("/update-profile")}
+      >
+        Actualizar perfil
+      </Button>
     </div>
     </div>
   );

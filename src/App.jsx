@@ -12,10 +12,11 @@ import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
 import Reservations from './pages/Reservations.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import BeDriver from './pages/RegisterCar.jsx';
 import UpdateProfile from './pages/UpdateProfile.jsx';
 import RegisterCar from "./pages/RegisterCar.jsx";
-
+import Driver from "./pages/Driver.jsx";
+import NewTrip from "./pages/NewTrip.jsx";
+import FinalizeTrip from "./pages/FinalizeTrip.jsx";
 
 const App = () => {
     return (
@@ -32,9 +33,11 @@ const App = () => {
                     } />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/reservations" element={<Reservations />} />
-                    <Route path="/be-driver" element={<BeDriver />} />
+                    <Route path="/be-driver" element={<Driver />} />
                     <Route path="/update-profile" element={<UpdateProfile />} />
                     <Route path="/register-car" element={<RegisterCar />} />
+                    <Route path="/create-trip" element={<NewTrip />} />
+                    <Route path="/finalize-trip" element={<FinalizeTrip />} />
                     
                 </Routes>
             </div>

@@ -33,7 +33,7 @@ const Button = ({
 
   // Base classes
   const baseClasses =
-    "font-bold rounded-full border transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FEF801]";
+    "w-fit font-bold rounded-full border transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FEF801]";
 
   // Disabled state
   const disabledClasses = disabled

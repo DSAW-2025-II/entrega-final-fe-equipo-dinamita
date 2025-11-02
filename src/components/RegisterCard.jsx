@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
 
 const RegisterCard = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -87,6 +88,8 @@ const RegisterCard = ({ onSuccess }) => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       <div
@@ -130,6 +133,17 @@ const RegisterCard = ({ onSuccess }) => {
           </div>
         ))}
       </div>
+      <p
+          className="text-[12px] lg:text-[15px] text-white text-center mt-1"
+        >
+          ¿Ya tienes cuenta?{" "}
+          <button
+            className="text-[#FEF801] hover:underline cursor-pointer"
+            onClick={() => navigate("/login")}
+          >
+            Inicia sesión
+          </button>
+        </p>
       <Button
         variant="primary"
         size="medium"

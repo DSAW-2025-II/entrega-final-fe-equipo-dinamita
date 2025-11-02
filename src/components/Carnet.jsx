@@ -1,11 +1,8 @@
 import React from "react";
 import Paragraph from "../components/Paragraph";
-import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
 import Picture from "./Picture";
 
 export default function Carnet({ name, lastName, id, email, number, photo }) {
-const navigate = useNavigate();
     return (
     <div className="flex flex-col items-start mt-4">
       {/* CONTENEDOR PRINCIPAL: FOTO + INFO */}
@@ -40,16 +37,6 @@ const navigate = useNavigate();
           </Paragraph>
         </div>
       </div>
-
-      {/* BOTÓN */}
-      <Button
-        variant="primary"
-        size="medium"
-        className="mt-10 ml-7"
-        onClick={() => navigate("/update-profile")}
-      >
-        Actualizar perfil
-      </Button>
     </div>
   );
 }
