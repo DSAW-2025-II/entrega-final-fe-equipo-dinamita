@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons"; 
@@ -8,9 +9,12 @@ import LoadingModal from "../components/LoadingModal";
 import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
+  const navigate = useNavigate();
   const { user, isLoading } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
+  
+  const isDriver = user?.currentRole === "driver";
 
   // Mostrar loading mientras se obtienen los datos
   if (isLoading || !user) {
@@ -32,28 +36,61 @@ export default function Home() {
     ¡Hola, {user.name}!
   </Tittle> 
     
-  {/* BOTÓN */} 
-   <div className="relative">
-    <Button 
-      variant="primary" 
-      size="extraLarge" 
-      className="self-start ml-8 mt-6 mb-6" 
-      onClick={toggleFilter}> 
-      Filtrado por:
-    </Button>
-
-    <FilterModal 
-    isOpen={openFilter} 
-    onClose={() => setOpenFilter(false)} />
+  {/* BOTÓN FILTRADO - solo mostrar si es passenger */}
+  {!isDriver && (
+    <div className="relative">
+      <Button 
+        variant="primary" 
+        size="extraLarge" 
+        className="self-start ml-8 mt-6 mb-6" 
+        onClick={toggleFilter}> 
+        Filtrado por:
+      </Button>
+      <FilterModal 
+        isOpen={openFilter} 
+        onClose={() => setOpenFilter(false)} 
+      />
     </div>
+  )}
 
   {/* options */} 
     <TopButtons />
   </div>
   
+  {/* Contenido dinámico según el rol */}
+  {isDriver ? (
+    // Si es driver, mostrar menú del conductor
+    <div className="flex flex-col items-start ml-8 gap-4 mt-4">
+      <div className="flex items-center gap-4">
+        <p className="text-[#FEF801] font-bold text-3xl">1.</p>
+        <p className="text-white font-bold text-3xl">Crea un</p>
+        <Button 
+          variant="primary"
+          size="medium"
+          onClick={() => navigate("/create-trip")}
+        >
+          Nuevo viaje
+        </Button>
+      </div>
+      
+      <div className="flex items-center gap-4">
+        <p className="text-[#FEF801] font-bold text-3xl">2.</p>
+        <p className="text-white font-bold text-3xl">Maneja seguro y no olvides</p>
+        <Button 
+          variant="primary"
+          size="medium"
+          onClick={() => navigate("/finalize-trip")}
+        >
+          Finalizar tu viaje
+        </Button>
+      </div>
+    </div>
+  ) : (
+    // Si es passenger, mostrar las tarjetas de viaje
     <div>
       <TravelCard />
     </div>
+  )}
 
     </div> 
     );

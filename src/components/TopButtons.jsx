@@ -2,12 +2,74 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomeLogo from "../assets/HomeLogo.svg";
 import NavLogo from "../assets/NavLogo.svg";
-
+import { useUser } from "../hooks/useUser";
 import api from "../api/axios.js";
 
 export default function TopButtons() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, refreshUser } = useUser();
+  const currentRole = user?.currentRole || "passenger";
+  const isDriver = currentRole === "driver";
+
+  const handleBePassenger = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.patch(
+        "/users/current-role",
+        { currentRole: "passenger" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setIsNavOpen(false);
+        await refreshUser();
+        // Pequeño delay para asegurar que el estado se actualice antes de navegar
+        setTimeout(() => {
+          navigate("/home");
+        }, 100);
+      }
+    } catch (error) {
+      console.error("Error actualizando rol:", error);
+    }
+  };
+
+  const handleBeDriver = async () => {
+    // Verificar que el usuario tenga el rol 'driver' disponible
+    if (!user?.roles?.includes("driver")) {
+      setIsNavOpen(false);
+      navigate("/be-driver");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.patch(
+        "/users/current-role",
+        { currentRole: "driver" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setIsNavOpen(false);
+        await refreshUser();
+        // Pequeño delay para asegurar que el estado se actualice antes de navegar
+        setTimeout(() => {
+          navigate("/home");
+        }, 100);
+      }
+    } catch (error) {
+      console.error("Error actualizando rol:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -56,12 +118,16 @@ export default function TopButtons() {
         }`}
       >
         {/* Header del panel (botones dentro del bloque amarillo) */}
-        <div className="flex justify-end items-center gap-6 p-6">
+        <div className="flex justify-end items-center gap-6 p-6 bg-[#FFED00]">
+          {/* Botón home - siempre uno solo */}
           <img
             src={HomeLogo}
             alt="Home"
             className="w-10 h-10 lg:w-12 lg:h-12 cursor-pointer transition-transform duration-200 hover:scale-110 brightness-0"
-            onClick={() => navigate("/home")}
+            onClick={() => {
+              navigate("/home");
+              setIsNavOpen(false);
+            }}
           />
           <img
             src={NavLogo}
@@ -71,34 +137,75 @@ export default function TopButtons() {
           />
         </div>
 
-        {/* Contenido del menú */}
-        <ul className="flex flex-col gap-4 px-6 font-semibold text-xl">
+        {/* Contenido del menú - dinámico según el rol, diseño original (fondo amarillo, hover negro) */}
+        <ul className="flex flex-col gap-4 px-6 pt-4 font-semibold text-xl text-black">
           <li
             className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/profile")}
+            onClick={() => {
+              navigate("/profile");
+              setIsNavOpen(false);
+            }}
           >
-            Tu perfil
+            Mi perfil
           </li>
-          <li
-            className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/reservations")}
-          >
-            Mis reservas
-          </li>
-          <li
-            className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
-            onClick={() => navigate("/be-driver")}
-          >
-            Sé conductor
-          </li>
+          
+          {isDriver ? (
+            <>
+              <li
+                className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+                onClick={handleBePassenger}
+              >
+                Sé pasajero
+              </li>
+              <li
+                className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+                onClick={() => {
+                  navigate("/my-vehicle");
+                  setIsNavOpen(false);
+                }}
+              >
+                Mi vehículo
+              </li>
+              <li
+                className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+                onClick={() => {
+                  navigate("/my-trips");
+                  setIsNavOpen(false);
+                }}
+              >
+                Mis viajes
+              </li>
+            </>
+          ) : (
+            <>
+              <li
+                className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+                onClick={() => {
+                  navigate("/reservations");
+                  setIsNavOpen(false);
+                }}
+              >
+                Mis reservas
+              </li>
+              <li
+                className="hover:bg-black hover:text-yellow-300 p-2 rounded-md cursor-pointer"
+                onClick={handleBeDriver}
+              >
+                Sé conductor
+              </li>
+            </>
+          )}
         </ul>
 
-        <button
-          onClick={handleLogout}
-          className="mt-auto bg-black text-yellow-300 font-medium text-lg py-3 mx-6 mb-6 rounded-3xl hover:bg-gray-900 transition"
-        >
-          Cerrar sesión
-        </button>
+        {/* Botón de cerrar sesión */}
+        <div className="bg-[#FFED00] p-6">
+          <button
+            onClick={handleLogout}
+            className="w-full bg-black text-yellow-300 font-medium text-lg py-3 rounded-3xl hover:bg-gray-900 transition"
+          >
+            Cerrar sesión
+          </button>
+        </div>
       </div>
 
       {/* Botones flotantes cuando el menú está cerrado */}

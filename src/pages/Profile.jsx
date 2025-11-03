@@ -29,19 +29,14 @@ export default function Profile() {
           variant="primary"
           size="extraLarge"
           className="self-start ml-10 mt-6">
-          Tu perfil
+          Mi perfil
         </Tittle>
 
         {/* BOTONES DE ARRIBA */}
         <TopButtons />
         </div>
         <div className="ml-8">
-        <Paragraph
-        variant="primary"
-        size="medium"
-        className="self-start ml-16 mt-6">
-            Tu foto:
-        </Paragraph>
+        
 
       {/* CONTENEDOR DE PERFIL */}
       <div className="ml-10 mt-2 flex flex-col items-start space-y-4">

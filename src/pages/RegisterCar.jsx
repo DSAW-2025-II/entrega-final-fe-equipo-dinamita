@@ -7,9 +7,11 @@ import SuccessModal from "../components/SuccessModal";
 import ErrorModal from "../components/ErrorModal";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 
 export default function RegisterCar() {
   const navigate = useNavigate();
+  const { refreshUser } = useUser();
   
   const [formData, setFormData] = useState({
     plate: ["", "", "", "", "", ""], // 6 caracteres para la placa
@@ -167,6 +169,8 @@ export default function RegisterCar() {
 
       if (response.data) {
         setIsSuccess(true);
+        // Refrescar el contexto del usuario para obtener los roles actualizados
+        await refreshUser();
         setTimeout(() => {
           setIsSuccess(false);
           navigate("/home");

@@ -4,7 +4,9 @@ import TopButtons from "../components/TopButtons";
 import UpdateProfileModal from "../components/UpdateProfileModal";
 import Button from "../components/Button";
 import Picture from "../components/Picture";
+import LoadingModal from "../components/LoadingModal";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 import Paragraph from "../components/Paragraph";
 
 export default function UpdateProfile() {
@@ -15,9 +17,17 @@ const openModalFor = (field) => {
 setSelectedField(field);
 setOpenModal(true);
 };
-const [photo, setPhoto] = useState(null); 
 
 const navigate = useNavigate();
+const { user, isLoading } = useUser();
+
+if (isLoading || !user) {
+  return (
+    <div className="w-screen h-screen bg-black flex items-center justify-center">
+      <LoadingModal message="Cargando..." />
+    </div>
+  );
+}
   return (
     <div className="w-screen h-screen bg-black flex flex-col text-white font-inter">
         <div className="flex justify-between items-center">
@@ -41,7 +51,7 @@ const navigate = useNavigate();
         className="mb-2 ml-21 mt-2">
         Tu foto:
         </Paragraph>
-        <Picture photo={photo} className="ml-15 mt-[1rem]"/>
+        <Picture photo={user.photo || "/perfil.png"} className="ml-15 mt-[1rem]"/>
     </div>
 
     {/* Columna derecha: botones */}

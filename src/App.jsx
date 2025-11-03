@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { UserProvider } from './contexts/UserContext.jsx';
 
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
@@ -17,12 +18,15 @@ import RegisterCar from "./pages/RegisterCar.jsx";
 import Driver from "./pages/Driver.jsx";
 import NewTrip from "./pages/NewTrip.jsx";
 import FinalizeTrip from "./pages/FinalizeTrip.jsx";
+import MyVehicle from "./pages/MyVehicle.jsx";
+import MyTrips from "./pages/MyTrips.jsx";
 
 const App = () => {
     return (
         <Router>
-            <div>
-                <Routes>
+            <UserProvider>
+                <div>
+                    <Routes>
                     <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
@@ -38,9 +42,20 @@ const App = () => {
                     <Route path="/register-car" element={<RegisterCar />} />
                     <Route path="/create-trip" element={<NewTrip />} />
                     <Route path="/finalize-trip" element={<FinalizeTrip />} />
+                    <Route path="/my-vehicle" element={
+                        <ProtectedRoute>
+                            <MyVehicle />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/my-trips" element={
+                        <ProtectedRoute>
+                            <MyTrips />
+                        </ProtectedRoute>
+                    } />
                     
-                </Routes>
-            </div>
+                    </Routes>
+                </div>
+            </UserProvider>
         </Router>
     );
 };
