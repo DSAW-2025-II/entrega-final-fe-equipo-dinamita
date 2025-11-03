@@ -1,78 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext.js";
 
 export const useUser = () => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setIsLoading(true);
-        const token = localStorage.getItem("token");
-        
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const response = await api.get("/users/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.data?.user) {
-          setUser(response.data.user);
-          setError(null);
-        }
-      } catch (err) {
-        console.error("Error obteniendo datos del usuario:", err);
-        setError(err);
-        
-        // Si hay error de autenticación, redirigir a login
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, [navigate]);
-
-  // Función para refrescar los datos del usuario
-  const refreshUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const response = await api.get("/users/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data?.user) {
-        setUser(response.data.user);
-        setError(null);
-      }
-    } catch (err) {
-      console.error("Error refrescando datos del usuario:", err);
-      setError(err);
-      
-      if (err.response?.status === 401 || err.response?.status === 403) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    }
-  };
-
-  return { user, isLoading, error, refreshUser };
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
 };
-
