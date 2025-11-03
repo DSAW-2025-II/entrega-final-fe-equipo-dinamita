@@ -286,6 +286,16 @@ export default function RegisterCar() {
             placeholder="Modelo"
           />
           {errors.model && <span className="text-[#FE0144] text-xs mb-2">{errors.model}</span>}
+          
+          <input
+            type="text"
+            name="color"
+            value={formData.color}
+            onChange={handleChange}
+            className={`w-11/12 rounded-full py-2 px-4 text-lg bg-white placeholder-[#bab9a0] mb-2 shadow font-medium border-none focus:outline-none ${errors.color ? "border-b-2 border-[#FE0144]" : ""}`}
+            placeholder="Color"
+          />
+          {errors.color && <span className="text-[#FE0144] text-xs mb-2">{errors.color}</span>}
         </div>
         
         {/* Tarjeta derecha: Uploads vehículo y SOAT */}

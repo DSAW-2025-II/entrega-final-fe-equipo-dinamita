@@ -22,42 +22,39 @@ import MyVehicle from "./pages/MyVehicle.jsx";
 import MyTrips from "./pages/MyTrips.jsx";
 
 const App = () => {
-    return (
-        <Router>
-            <UserProvider>
-                <div>
-                    <Routes>
-                    <Route path="/" element={<Navigate to="/login" replace />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/home" element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/reservations" element={<Reservations />} />
-                    <Route path="/be-driver" element={<Driver />} />
-                    <Route path="/update-profile" element={<UpdateProfile />} />
-                    <Route path="/register-car" element={<RegisterCar />} />
-                    <Route path="/create-trip" element={<NewTrip />} />
-                    <Route path="/finalize-trip" element={<FinalizeTrip />} />
-                    <Route path="/my-vehicle" element={
-                        <ProtectedRoute>
-                            <MyVehicle />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/my-trips" element={
-                        <ProtectedRoute>
-                            <MyTrips />
-                        </ProtectedRoute>
-                    } />
-                    
-                    </Routes>
-                </div>
-            </UserProvider>
-        </Router>
-    );
+  return (
+    <Router>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/reservations" element={<Reservations />} />
+      <Route path="/be-driver" element={<Driver />} />
+      <Route path="/update-profile" element={<UpdateProfile />} />
+      <Route path="/register-car" element={<RegisterCar />} />
+      <Route path="/create-trip" element={<NewTrip />} />
+      <Route path="/finalize-trip" element={<FinalizeTrip />} />
+      <Route path="/my-vehicle" element={
+        <ProtectedRoute>
+          <MyVehicle />
+        </ProtectedRoute>
+      } />
+      <Route path="/my-trips" element={
+        <ProtectedRoute>
+          <MyTrips />
+        </ProtectedRoute>
+      } />
+        </Routes>
+      </UserProvider>
+    </Router>
+  );
 };
 
 export default App;

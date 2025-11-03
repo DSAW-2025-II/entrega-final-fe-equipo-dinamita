@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import RegisterCard from "../components/RegisterCard";
 import UploadProfileModal from "../components/UploadProfileModal.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
@@ -122,13 +122,30 @@ export default function Register() {
     setIsModalOpen(false);
   };
 
+  const handleSuccessClose = useCallback(() => {
+    setIsSuccess(false);
+    navigate('/login');
+  }, [navigate]);
+
+  // Auto-cerrar el modal de éxito después de 2 segundos
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        handleSuccessClose();
+      }, 2000);
+
+      // Limpiar el timer si el componente se desmonta o el modal se cierra manualmente
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, handleSuccessClose]);
+
   return (
     <div className="w-full min-h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-y-auto py-8">
       <div className="bg-[#FEF801] text-[#1B1B1B] font-bold text-lg lg:text-3xl py-2 px-5 lg:px-6 rounded-full mb-2">
         Crea tu Cuenta
       </div>
       {isLoading && <LoadingModal message="Procesando registro..." />}
-      {isSuccess && <SuccessModal message={"¡Registro exitoso!"} onClose={()=>{setIsSuccess(false); navigate('/login')}} />}
+      {isSuccess && <SuccessModal message={"¡Registro exitoso!"} onClose={handleSuccessClose} />}
       {errorMessages.length > 0 ? (
         <ErrorModal messages={errorMessages} onClose={handleErrorModalClose} />
       ) : !isModalOpen ? (
@@ -138,6 +155,7 @@ export default function Register() {
           isOpen={isModalOpen}
           onUpload={handleModalPhotoUpload}
           onSkip={handleModalSkip}
+          isLoading={isLoading}
         />
       )}
     </div>

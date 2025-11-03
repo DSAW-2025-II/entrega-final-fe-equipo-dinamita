@@ -27,11 +27,11 @@ const ErrorModal = ({ messages = [], onClose }) => {
         <img
           src={WillySad}
           alt="Error icon"
-          className="mx-auto mb-3 w-[120px] h-[120px] select-none"
+          className="mx-auto mb-1 w-[120px] h-[120px] select-none"
           draggable="false"
         />
         {/* Mensajes de error */}
-        <div className="flex flex-col gap-2 mt-5 mb-2 w-full">
+        <div className="flex flex-col gap-2 mt-2 mb-2 w-full">
           {messages.map((msg, i) => (
             <p
               key={i}

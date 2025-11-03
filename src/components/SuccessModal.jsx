@@ -24,9 +24,9 @@ const SuccessModal = ({ message, onClose }) => {
           ×
         </button>
         {/* Logo Willy feliz */}
-        <img src={WillyHappy} alt="Éxito" className="mx-auto mb-3 w-[120px] h-[120px] select-none" draggable="false" />
+        <img src={WillyHappy} alt="Éxito" className="mx-auto mb-1 w-[120px] h-[120px] select-none" draggable="false" />
         {/* Mensaje de éxito */}
-        <div className="flex flex-col mt-5 mb-2 w-full items-center">
+        <div className="flex flex-col mt-2 mb-2 w-full items-center">
           <p className="text-black text-center text-lg md:text-2xl font-extrabold">
             {message}
           </p>

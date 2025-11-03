@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
@@ -10,9 +10,32 @@ import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
   const navigate = useNavigate();
-  const { user, isLoading } = useUser();
+  const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
+  const previousUserIdRef = useRef(null);
+  
+  // Detectar cuando cambia el userId y forzar recarga
+  useEffect(() => {
+    if (user?.id) {
+      const currentUserId = user.id;
+      
+      // Si hay un userId previo y es diferente, significa que cambió el usuario
+      if (previousUserIdRef.current && previousUserIdRef.current !== currentUserId) {
+        // El userId cambió (nuevo login después de logout)
+        // Limpiar estado local y forzar recarga completa
+        setOpenFilter(false);
+        refreshUser();
+      }
+      
+      // Guardar el userId actual
+      previousUserIdRef.current = currentUserId;
+    } else {
+      // Si no hay usuario, limpiar la referencia y estado local
+      previousUserIdRef.current = null;
+      setOpenFilter(false);
+    }
+  }, [user?.id, refreshUser]);
   
   const isDriver = user?.currentRole === "driver";
 

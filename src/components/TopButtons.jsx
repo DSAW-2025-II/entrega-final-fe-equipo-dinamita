@@ -8,7 +8,7 @@ import api from "../api/axios.js";
 export default function TopButtons() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, refreshUser } = useUser();
+  const { user, refreshUser, clearUser } = useUser();
   const currentRole = user?.currentRole || "passenger";
   const isDriver = currentRole === "driver";
 
@@ -76,14 +76,28 @@ export default function TopButtons() {
       const token = localStorage.getItem("token");
       
       // Call the logout endpoint with the JWT token in the Authorization header
-      await api.post("/auth/logout", {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      if (token) {
+        try {
+          await api.post("/auth/logout", {}, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+        } catch (error) {
+          // Continuar con el logout aunque falle el endpoint
+          console.error("Error en endpoint de logout:", error);
         }
-      });
+      }
       
-      // Remove the JWT token from localStorage
+      // Limpiar el estado del usuario inmediatamente
+      clearUser();
+      
+      // Remove the JWT token and user from localStorage
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      // Disparar evento para sincronizar otras pestañas
+      window.dispatchEvent(new Event('tokenChange'));
       
       // Redirect to login page
       navigate("/login");
@@ -93,9 +107,11 @@ export default function TopButtons() {
     } catch (error) {
       console.error("❌ Logout error:", error);
       
-      // Even if there's an error, remove the token and redirect
-      // This ensures the user can always log out
+      // Even if there's an error, clean everything and redirect
+      clearUser();
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.dispatchEvent(new Event('tokenChange'));
       navigate("/login");
       setIsNavOpen(false);
     }
