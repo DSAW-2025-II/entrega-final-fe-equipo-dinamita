@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons";
@@ -7,9 +7,11 @@ import Paragraph from "../components/Paragraph";
 import { useNavigate } from "react-router-dom";
 
 export default function BeDriver() { 
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  
   return ( 
-    <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
+    <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter">
+
   {/* TÍTULO */} 
   <Tittle 
     variant="primary" 
@@ -20,15 +22,7 @@ const navigate = useNavigate();
 
   <TopButtons />
      <div className="ml-8">
-        <Paragraph
-        variant="primary"
-        size="medium"
-        className="self-start ml-16 mt-6">
-            Tu foto:
-        </Paragraph>
-        <div className="ml-10">
         <Carnet/>
-       </div>
     </div>
 
     <div className="flex items-center ml-18 mt-4 gap-4">

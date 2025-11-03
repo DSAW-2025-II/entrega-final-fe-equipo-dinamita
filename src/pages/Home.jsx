@@ -1,86 +1,119 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons"; 
 import TravelCard from "../components/TravelCard";
 import FilterModal from "../components/FilterModal";
-import TravelModal from "../components/TravelModal";
+import LoadingModal from "../components/LoadingModal";
+import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
-
-  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
-  const userName = user.name;
   const toggleFilter = () => setOpenFilter((prev) => !prev);
+  const previousUserIdRef = useRef(null);
+  
+  // Detectar cuando cambia el userId y forzar recarga
+  useEffect(() => {
+    if (user?.id) {
+      const currentUserId = user.id;
+      
+      // Si hay un userId previo y es diferente, significa que cambió el usuario
+      if (previousUserIdRef.current && previousUserIdRef.current !== currentUserId) {
+        // El userId cambió (nuevo login después de logout)
+        // Limpiar estado local y forzar recarga completa
+        setOpenFilter(false);
+        refreshUser();
+      }
+      
+      // Guardar el userId actual
+      previousUserIdRef.current = currentUserId;
+    } else {
+      // Si no hay usuario, limpiar la referencia y estado local
+      previousUserIdRef.current = null;
+      setOpenFilter(false);
+    }
+  }, [user?.id, refreshUser]);
+  
+  const isDriver = user?.currentRole === "driver";
 
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedTravel, setSelectedTravel] = useState(null);
-
-  const handleCardClick = (travel) => {
-    setSelectedTravel(travel);
-    setOpenModal(true);
-  };
-
-const travels = [
-    {
-      id: 1,
-      image: "https://via.placeholder.com/300x150?text=Car+1",
-      driverName: "Carlos Pérez",
-      carBrand: "Mazda",
-      carPlate: "ABC123",
-      departurePoint: "Bogotá",
-      destinationPoint: "Medellín",
-      departureTime: "8:00 AM",
-      farePerPassenger: 50000,
-      driverPhone: "3001234567",
-    },
-  ];
+  // Mostrar loading mientras se obtienen los datos
+  if (isLoading || !user) {
+    return (
+      <div className="w-screen h-screen bg-black flex items-center justify-center">
+        <LoadingModal message="Cargando..." />
+      </div>
+    );
+  }
 
   return ( 
-  <div className="w-screen min-h-screen bg-black flex flex-col text-white font-inter"> 
-    {/* 🔹 CONTENEDOR SUPERIOR: Hola + Filtro + TopButtons */}
-    <div className="flex w-full max-w-6xl mx-auto items-start justify-between px-8 mt-7">
-      
-      {/* 🔸 Grupo izquierda: Hola + Filtro */}
-      <div className="flex items-center space-x-6">
-        <Tittle 
-          variant="primary" 
-          size="extraLarge"
-        > 
-          ¡Hola, {userName}!
-        </Tittle> 
-
-        <Button 
-          variant="primary" 
-          size="extraLarge"
-          onClick={toggleFilter}
-        > 
-          Filtrado por:
-        </Button>
-
-        <FilterModal 
-          isOpen={openFilter} 
-          onClose={() => setOpenFilter(false)} 
-        />
-      </div>
-
-      {/* 🔸 Botones arriba derecha */}
-      <TopButtons />
-    </div>
-
-    {/* 🔹 CONTENEDOR DE TARJETA */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 px-10 mt-16">
-       {travels.map((travel) => (
-        <div key={travel.id} onClick={() => handleCardClick(travel)}>
-        <TravelCard travel={travel} />
-      </div>
-      ))}
-    </div>
+  <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
+  {/* TÍTULO */} 
+  <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-10 px-2">
+  <Tittle 
+    variant="primary" 
+    size="extraLarge" 
+    className="self-start ml-10 mt-6" > 
+    ¡Hola, {user.name}!
+  </Tittle> 
     
-    <TravelModal
-       isOpen={openModal}
-       onClose={() => setOpenModal(false)}
-       travel={selectedTravel} />
+  {/* BOTÓN FILTRADO - solo mostrar si es passenger */}
+  {!isDriver && (
+    <div className="relative">
+      <Button 
+        variant="primary" 
+        size="extraLarge" 
+        className="self-start ml-8 mt-6 mb-6" 
+        onClick={toggleFilter}> 
+        Filtrado por:
+      </Button>
+      <FilterModal 
+        isOpen={openFilter} 
+        onClose={() => setOpenFilter(false)} 
+      />
+    </div>
+  )}
+
+  {/* options */} 
+    <TopButtons />
+  </div>
+  
+  {/* Contenido dinámico según el rol */}
+  {isDriver ? (
+    // Si es driver, mostrar menú del conductor
+    <div className="flex flex-col items-start ml-8 gap-4 mt-4">
+      <div className="flex items-center gap-4">
+        <p className="text-[#FEF801] font-bold text-3xl">1.</p>
+        <p className="text-white font-bold text-3xl">Crea un</p>
+        <Button 
+          variant="primary"
+          size="medium"
+          onClick={() => navigate("/create-trip")}
+        >
+          Nuevo viaje
+        </Button>
+      </div>
+      
+      <div className="flex items-center gap-4">
+        <p className="text-[#FEF801] font-bold text-3xl">2.</p>
+        <p className="text-white font-bold text-3xl">Maneja seguro y no olvides</p>
+        <Button 
+          variant="primary"
+          size="medium"
+          onClick={() => navigate("/finalize-trip")}
+        >
+          Finalizar tu viaje
+        </Button>
+      </div>
+    </div>
+  ) : (
+    // Si es passenger, mostrar las tarjetas de viaje
+    <div>
+      <TravelCard />
+    </div>
+  )}
 
     </div>
  

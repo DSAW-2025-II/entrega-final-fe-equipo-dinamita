@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Colors from '../assets/Colors';
 import WillyHappy from '../assets/WillyHappy.svg';
 import Button from '../components/Button';
 import LoadingModal from '../components/LoadingModal';
 import SuccessModal from '../components/SuccessModal';
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 import api from "../api/axios.js";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { refreshUser } = useUser();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,8 +39,9 @@ const Login = () => {
         
         const token = res.data.token;
         localStorage.setItem("token", token);
-
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        
+        // Esperar a que se cargue el usuario antes de navegar
+        await refreshUser();
         
         setErrors({});
         setIsSuccess(true);
@@ -80,10 +83,30 @@ const Login = () => {
     }
   };
 
+  const handleSuccessClose = useCallback(() => {
+    setIsSuccess(false);
+    // Pequeño delay para asegurar que el contexto se actualice
+    setTimeout(() => {
+      navigate('/home');
+    }, 100);
+  }, [navigate]);
+
+  // Auto-cerrar el modal de éxito después de 2 segundos
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        handleSuccessClose();
+      }, 2000);
+
+      // Limpiar el timer si el componente se desmonta o el modal se cierra manualmente
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, handleSuccessClose]);
+
   return (
     <>
       {isLoading && <LoadingModal message="Iniciando sesión..." />}
-      {isSuccess && <SuccessModal message={"¡Login exitoso!"} onClose={()=>{setIsSuccess(false); navigate('/home')}} />}
+      {isSuccess && <SuccessModal message={"¡Login exitoso!"} onClose={handleSuccessClose} />}
       <div 
       className="w-full h-screen bg-black flex flex-col items-center justify-center text-white font-inter overflow-hidden"
       onKeyDown={handleKeyDown}

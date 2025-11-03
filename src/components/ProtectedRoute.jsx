@@ -29,6 +29,7 @@ const ProtectedRoute = ({ children }) => {
         // Token is invalid or expired
         console.error('❌ Error verifying token:', error);
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
