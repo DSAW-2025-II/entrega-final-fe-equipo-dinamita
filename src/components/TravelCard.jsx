@@ -6,10 +6,10 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
   return (
     <div
       onClick={() => onOpen(trip)}
-      className="relative w-[260px] h-[240px] cursor-pointer"
+      className="relative w-[303px] h-[280px] cursor-pointer"
     >
       {/* Amarillo */}
-      <div className="absolute inset-0 bg-[#FCF837] border-4 border-[#FE0144] rounded-2xl"></div>
+      <div className="absolute inset-0 bg-[#FCF837] rounded-2xl card-shadow"></div>
 
       {/* Imagen */}
       <div
@@ -32,6 +32,15 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
           onClick={() => onOpen(trip)}
         >
           Ver ruta
+        </Tittle>
+
+        <Tittle
+          variant="primary"
+          size="semi"
+          className="mb-1 ml-1"
+          onClick={() => onOpen(trip)}
+        >
+          Puestos: [X]
         </Tittle>
 
         <p className="text-sm font-bold text-[#1B1B1B]">
