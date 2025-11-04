@@ -13,9 +13,11 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
-  const [showVehicleRequiredModal, setShowVehicleRequiredModal] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
   const previousUserIdRef = useRef(null);
+
+  const isDriver = user?.currentRole === "driver";
+
   
   // Detectar cuando cambia el userId y forzar recarga
   useEffect(() => {
@@ -38,26 +40,6 @@ export default function Home() {
       setOpenFilter(false);
     }
   }, [user?.id, refreshUser]);
-  
-  const isDriver = user?.currentRole === "driver";
-
-  // Función para verificar si el usuario tiene vehículo y manejar la navegación
-  const handleDriverAction = (destination) => {
-    // Verificar si el usuario tiene un vehículo registrado
-    if (!user?.vehicleId) {
-      // No tiene vehículo, mostrar modal y luego redirigir
-      setShowVehicleRequiredModal(true);
-    } else {
-      // Tiene vehículo, navegar normalmente
-      navigate(destination);
-    }
-  };
-
-  // Función para cerrar el modal y redirigir a registro de vehículo
-  const handleModalClose = () => {
-    setShowVehicleRequiredModal(false);
-    navigate("/register-car");
-  };
 
   // Mostrar loading mientras se obtienen los datos
   if (isLoading || !user) {
@@ -110,7 +92,7 @@ export default function Home() {
         <Button 
           variant="primary"
           size="medium"
-          onClick={() => handleDriverAction("/create-trip")}
+          onClick={() => navigate('/create-trip')}
         >
           Nuevo viaje
         </Button>
@@ -122,7 +104,7 @@ export default function Home() {
         <Button 
           variant="primary"
           size="medium"
-          onClick={() => handleDriverAction("/finalize-trip")}
+          onClick={() => navigate("/finalize-trip")}
         >
           Finalizar tu viaje
         </Button>
@@ -135,13 +117,7 @@ export default function Home() {
     </div>
   )}
 
-  {/* Modal para cuando no tiene vehículo registrado */}
-  {showVehicleRequiredModal && (
-    <ErrorModal
-      messages={["¡Primero debes registrar tu vehículo!"]}
-      onClose={handleModalClose}
-    />
-  )}
+  
 
     </div>
  
