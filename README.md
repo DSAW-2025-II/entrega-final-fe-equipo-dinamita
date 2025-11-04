@@ -6,4 +6,4 @@
 
 ¡Bienvenidos al repositorio de Frontend de nuestra App! README en construcción ⚒️
 
-[Link de nuestro proyecto desplegado]()
+[Link de nuestro proyecto desplegado]
