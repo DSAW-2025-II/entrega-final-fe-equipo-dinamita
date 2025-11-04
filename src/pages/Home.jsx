@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons"; 
 import TravelCard from "../components/TravelCard";
+import TravelModal from "../components/TravelModal";
 import FilterModal from "../components/FilterModal";
 import LoadingModal from "../components/LoadingModal";
 import { useUser } from "../hooks/useUser";
@@ -12,8 +13,16 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
+  const [selectedTravel, setSelectedTravel] = useState(null);
+  const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
   const previousUserIdRef = useRef(null);
+
+  // Manejar cuando se hace clic en una tarjeta de viaje
+  const handleTravelClick = (trip) => {
+    setSelectedTravel(trip);
+    setIsTravelModalOpen(true);
+  };
 
   const isDriver = user?.currentRole === "driver";
 
@@ -112,7 +121,12 @@ export default function Home() {
   ) : (
     // Si es passenger, mostrar las tarjetas de viaje
     <div>
-      <TravelCard />
+      <TravelCard onOpen={handleTravelClick} />
+      <TravelModal 
+        isOpen={isTravelModalOpen}
+        onClose={() => setIsTravelModalOpen(false)}
+        travel={selectedTravel}
+      />
     </div>
   )}
 
