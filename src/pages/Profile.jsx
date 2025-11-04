@@ -36,6 +36,12 @@ export default function Profile() {
         <TopButtons />
         </div>
         <div className="ml-8">
+        <Paragraph
+        variant="primary"
+        size="medium"
+        className="self-start ml-16 mt-6">
+            Tu foto:
+        </Paragraph>
         
 
       {/* CONTENEDOR DE PERFIL */}

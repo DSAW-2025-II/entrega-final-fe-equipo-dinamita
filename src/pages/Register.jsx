@@ -22,12 +22,12 @@ export default function Register() {
     setIsModalOpen(true);
   };
 
-  // Handler omitir (subir datos a db sin foto)
+  // Handler omitir (subir datos a db sin foto - el backend usará el default)
   const handleModalSkip = async () => {
     if (!userFormData) return;
     setIsLoading(true);
     try {
-      // Crear FormData (sin archivo)
+      // Crear FormData sin foto - el backend usará el base64 por defecto
       const formDataToSend = new FormData();
       formDataToSend.append("name", userFormData.name);
       formDataToSend.append("lastName", userFormData.lastName);
