@@ -6,7 +6,6 @@ import TopButtons from "../components/TopButtons";
 import TravelCard from "../components/TravelCard";
 import FilterModal from "../components/FilterModal";
 import LoadingModal from "../components/LoadingModal";
-import ErrorModal from "../components/ErrorModal";
 import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
