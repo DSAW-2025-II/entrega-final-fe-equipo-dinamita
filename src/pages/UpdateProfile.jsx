@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tittle from "../components/Tittle";
 import TopButtons from "../components/TopButtons";
 import UpdateProfileModal from "../components/UpdateProfileModal";
@@ -26,6 +26,18 @@ setOpenModal(true);
 
 const navigate = useNavigate();
 const { user, isLoading, refreshUser } = useUser();
+
+// Auto-cerrar el modal de éxito después de 1.5 segundos
+useEffect(() => {
+  if (isSuccess) {
+    const timer = setTimeout(() => {
+      setIsSuccess(false);
+    }, 1500);
+
+    // Limpiar el timer si el componente se desmonta o el modal se cierra manualmente
+    return () => clearTimeout(timer);
+  }
+}, [isSuccess]);
 
 const handlePhotoUpload = async (e) => {
   const file = e.target.files[0];
@@ -72,7 +84,7 @@ if (isLoading || !user) {
       {isUploadingPhoto && <LoadingModal message="Actualizando foto de perfil..." />}
       {isSuccess && (
         <SuccessModal
-          message="¡Foto de perfil actualizada exitosamente!"
+          message="¡Datos actualizados exitosamente!"
           onClose={() => setIsSuccess(false)}
         />
       )}
@@ -159,9 +171,15 @@ if (isLoading || !user) {
 
     {/* Modal */}
     <UpdateProfileModal
-    isOpen={openModal}
-    onClose={() => setOpenModal(false)}
-    field={selectedField}
+      isOpen={openModal}
+      onClose={() => setOpenModal(false)}
+      field={selectedField}
+      user={user}
+      onSuccess={async () => {
+        // Refrescar la información del usuario después de actualizar
+        await refreshUser();
+        setIsSuccess(true);
+      }}
     />
 
     <button
