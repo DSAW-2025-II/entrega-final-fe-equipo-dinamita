@@ -80,7 +80,7 @@ if (isLoading || !user) {
   );
 }
   return (
-    <div className="w-screen h-screen bg-black flex flex-col text-white font-inter">
+    <div className="min-h-screen w-full bg-black flex flex-col text-white font-inter overflow-x-hidden overflow-y-auto lg:overflow-y-hidden">
       {isUploadingPhoto && <LoadingModal message="Actualizando foto de perfil..." />}
       {isSuccess && (
         <SuccessModal
@@ -107,68 +107,72 @@ if (isLoading || !user) {
         </div>
 
       {/* Sección de foto */}
-      <div className="flex items-start gap-8 mt-4">
-    {/* Columna izquierda: texto + foto */}
-    <div className="flex flex-col items-start ml-3">
-        <Paragraph 
-        size="medium" 
-        color="text-[#FEF801]" 
-        className="mb-2 ml-21 mt-2">
-        Tu foto:
-        </Paragraph>
-        <Picture photo={user.photo || "/perfil.png"} className="ml-15 mt-[1rem]"/>
-        
-        {/* Botón para actualizar foto */}
-        <div className="mt-4 ml-15">
-          <label className="block">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              className="hidden"
-              id="photo-upload"
-            />
-            <Button
-              variant="primary"
-              size="semi"
-              className="!py-1 !px-4"
-              onClick={() => document.getElementById('photo-upload').click()}
-            >
-              Actualizar foto
-            </Button>
-          </label>
+      <div className="flex flex-col items-center mt-6 gap-6 lg:flex-row lg:items-start lg:gap-8">
+        {/* Columna izquierda: texto + foto */}
+        <div className="flex flex-col items-center lg:items-start lg:ml-3">
+          <Paragraph
+            size="medium"
+            color="text-[#FEF801]"
+            className="mb-2 mt-2 text-center lg:text-left"
+          >
+            Tu foto:
+          </Paragraph>
+
+          <Picture
+            photo={user.photo || "/perfil.png"}
+            className="mt-[1rem] mx-auto lg:ml-15"
+          />
+
+          {/* Botón para actualizar foto */}
+          <div className="mt-4">
+            <label className="block">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="photo-upload"
+              />
+              <Button
+                variant="primary"
+                size="semi"
+                className="!py-1 !px-4"
+                onClick={() => document.getElementById('photo-upload').click()}
+              >
+                Actualizar foto
+              </Button>
+            </label>
+          </div>
         </div>
-    </div>
 
-    {/* Columna derecha: botones */}
-    <div className="flex flex-col gap-3 mt-19">
-        <Button
-        variant="primary"
-        size="semi"
-        className="!py-1 !px-4"
-        onClick={() => openModalFor("name")}
-        >
-        Nombre
-        </Button>
-        <Button
-        variant="primary"
-        size="semi"
-        className="!py-1 !px-4"
-        onClick={() => openModalFor("lastName")}
-        >
-        Apellidos
-        </Button>
-        <Button
-        variant="primary"
-        size="semi"
-        className="!py-1 !px-4"
-        onClick={() => openModalFor("phone")}
-        >
-        Número de celular
-        </Button>
-    </div>
-    </div>
-
+        {/* Columna derecha: botones */}
+        <div className="flex flex-col gap-3 items-center mt-4 lg:items-start lg:mt-19">
+          <Button
+            variant="primary"
+            size="semi"
+            className="!py-1 !px-4"
+            onClick={() => openModalFor("name")}
+          >
+            Nombre
+          </Button>
+          <Button
+            variant="primary"
+            size="semi"
+            className="!py-1 !px-4"
+            onClick={() => openModalFor("lastName")}
+          >
+            Apellidos
+          </Button>
+          <Button
+            variant="primary"
+            size="semi"
+            className="!py-1 !px-4"
+            onClick={() => openModalFor("phone")}
+          >
+            Número de celular
+          </Button>
+        </div>
+      </div>
     {/* Modal */}
     <UpdateProfileModal
       isOpen={openModal}
@@ -183,7 +187,7 @@ if (isLoading || !user) {
     />
 
     <button
-    className="text-[#FEF801] hover:underline cursor-pointer font-bold text-xl mt-50 ml-0 mb-6"
+    className="text-[#FEF801] hover:underline cursor-pointer font-bold text-xl mt-30 ml-0 mb-6"
     onClick={() => navigate("/profile")}
     style={{ textShadow: "0 0 6px rgba(0,0,0,0.8)" }}>
         Volver

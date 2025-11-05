@@ -7,6 +7,7 @@ import TravelCard from "../components/TravelCard";
 import TravelModal from "../components/TravelModal";
 import FilterModal from "../components/FilterModal";
 import LoadingModal from "../components/LoadingModal";
+import Paragraph from "../components/Paragraph";
 import { useUser } from "../hooks/useUser";
 
 export default function Home() { 
@@ -61,11 +62,12 @@ export default function Home() {
   return ( 
   <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
   {/* TÍTULO */} 
-  <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-10 px-2">
+  <div className="flex w-full max-w-6xl mx-auto items-start justify-between mb-4 lg:mb-10 px-2">
+  <div className="flex flex-col lg:flex-row items-center mt-16 lg:space-x-3 lg:ml-3 lg:mt-1">
   <Tittle 
     variant="primary" 
     size="extraLarge" 
-    className="self-start ml-10 mt-6" > 
+    className="self-start text-xl ml-8 mt-8 lg:text-3xl lg:ml-10 lg:mt-6" > 
     ¡Hola, {user.name}!
   </Tittle> 
     
@@ -75,7 +77,7 @@ export default function Home() {
       <Button 
         variant="primary" 
         size="extraLarge" 
-        className="self-start ml-8 mt-6 mb-6" 
+        className="self-start text-xl -ml-7 -mt-3 lg:text-3xl lg:ml-8 lg:mt-6 lg:mb-6" 
         onClick={toggleFilter}> 
         Filtrado por:
       </Button>
@@ -85,48 +87,59 @@ export default function Home() {
       />
     </div>
   )}
-
+  </div>
   {/* options */} 
     <TopButtons />
   </div>
+
+  <Paragraph
+    className="text-[#FEF801] text-start ml-10 mt-0  lg:ml-12 text-lg lg:text-2xl"
+  >
+    {isDriver ? "Bienvenido al panel de conductor" : "Explora los viajes disponibles"}
+  </Paragraph>
+  <Paragraph
+    className="text-white text-start ml-10 mt-0  lg:ml-12 text-lg lg:text-2xl"
+  >
+    {isDriver ?"¿Qué quieres hacer hoy?" : ""}
+  </Paragraph>
   
   {/* Contenido dinámico según el rol */}
   {isDriver ? (
     // Si es driver, mostrar menú del conductor
     <div className="flex flex-col items-start ml-8 gap-4 mt-4">
       <div className="flex items-center gap-4">
-        <p className="text-[#FEF801] font-bold text-3xl">1.</p>
-        <p className="text-white font-bold text-3xl">Crea un</p>
+        <p className="text-[#FEF801] font-bold text-3xl">◉</p>
         <Button 
           variant="primary"
           size="medium"
           onClick={() => navigate('/create-trip')}
         >
-          Nuevo viaje
+          Crea un nuevo viaje
         </Button>
       </div>
       
       <div className="flex items-center gap-4">
-        <p className="text-[#FEF801] font-bold text-3xl">2.</p>
-        <p className="text-white font-bold text-3xl">Maneja seguro y no olvides</p>
+        <p className="text-[#FEF801] font-bold text-3xl">◉</p>
         <Button 
           variant="primary"
           size="medium"
           onClick={() => navigate("/finalize-trip")}
         >
-          Finalizar tu viaje
+          Finaliza tu viaje
         </Button>
       </div>
     </div>
   ) : (
     // Si es passenger, mostrar las tarjetas de viaje
     <div>
+      <div className="grid grid-cols-4 gap-6 px-10 mt-10">
       <TravelCard onOpen={handleTravelClick} />
       <TravelModal 
         isOpen={isTravelModalOpen}
         onClose={() => setIsTravelModalOpen(false)}
         travel={selectedTravel}
       />
+      </div>
     </div>
   )}
 

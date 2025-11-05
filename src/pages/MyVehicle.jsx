@@ -227,7 +227,7 @@ export default function MyVehicle() {
           </div>
         </div>
       ) : (
-        <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-10 px-8 max-w-md mx-auto text-center">
+        <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-10 px-8 max-w-xs lg:max-w-md mx-auto text-center">
           <Tittle size="semi" className="bg-[#FEF801] px-6 py-2 mb-4 shadow-md text-black">
             Error al cargar vehículo
           </Tittle>

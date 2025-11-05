@@ -6,7 +6,7 @@ export default function FilterModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-      <div className="absolute top-full right-0 mt-3 bg-[#1B1B1B] border-4 border-[#FEF801] rounded-3xl p-6 w-80 shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-50">
+      <div className="absolute top-full -left-10 lg:right-0 lg:mt-3 bg-[#1B1B1B] border-4 border-[#FEF801] rounded-3xl p-6 w-80 shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-50">
         {/* Botón de cerrar */}
         <button
           onClick={onClose}

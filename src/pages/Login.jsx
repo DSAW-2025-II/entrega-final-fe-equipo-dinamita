@@ -135,7 +135,7 @@ const Login = () => {
       </div>
 
       {/* Contenedor formulario */}
-      <div className="bg-[#D2D1BE] w-[280px] lg:w-[410px] h-auto rounded-[18px] flex flex-col items-center justify-center gap-4 lg:gap-6 shadow-md p-4">
+      <div className="bg-[#D2D1BE] w-[280px] lg:w-[390px] h-auto rounded-[18px] flex flex-col items-center justify-center gap-4 lg:gap-6 shadow-md p-4">
         <div className="w-full flex flex-col items-start">
           <input
             name="email"

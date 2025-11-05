@@ -8,7 +8,7 @@ export default function TravelModal({ isOpen, onClose, travel }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
-      <div className="bg-[#FEF801] border-4 border-[#1B1B1B] rounded-2xl shadow-xl p-4 w-[400px] relative">
+      <div className="bg-[#FEF801] border-4 border-[#1B1B1B] rounded-2xl shadow-xl p-4 w-[340px] lg:w-[400px] relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-3 text-pink-600 font-bold text-lg"
