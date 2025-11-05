@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons"; 
-import TravelCard from "../components/TravelCard";
-import TravelModal from "../components/TravelModal";
+import TravelContainer from "../components/TravelContainer";
 import FilterModal from "../components/FilterModal";
 import LoadingModal from "../components/LoadingModal";
 import { useUser } from "../hooks/useUser";
@@ -13,16 +12,8 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
-  const [selectedTravel, setSelectedTravel] = useState(null);
-  const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
   const previousUserIdRef = useRef(null);
-
-  // Manejar cuando se hace clic en una tarjeta de viaje
-  const handleTravelClick = (trip) => {
-    setSelectedTravel(trip);
-    setIsTravelModalOpen(true);
-  };
 
   const isDriver = user?.currentRole === "driver";
 
@@ -61,11 +52,11 @@ export default function Home() {
   return ( 
   <div className="w-screen h-screen bg-black flex flex-col justify-start text-white font-inter"> 
   {/* TÍTULO */} 
-  <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-10 px-2">
+  <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-6 lg:mb-10 px-2">
   <Tittle 
     variant="primary" 
     size="extraLarge" 
-    className="self-start ml-10 mt-6" > 
+    className="self-start ml-4 lg:ml-10 mt-4 lg:mt-6" > 
     ¡Hola, {user.name}!
   </Tittle> 
     
@@ -75,7 +66,7 @@ export default function Home() {
       <Button 
         variant="primary" 
         size="extraLarge" 
-        className="self-start ml-8 mt-6 mb-6" 
+        className="self-start ml-2 lg:ml-8 mt-4 lg:mt-6 mb-4 lg:mb-6" 
         onClick={toggleFilter}> 
         Filtrado por:
       </Button>
@@ -120,13 +111,16 @@ export default function Home() {
     </div>
   ) : (
     // Si es passenger, mostrar las tarjetas de viaje
-    <div>
-      <TravelCard onOpen={handleTravelClick} />
-      <TravelModal 
-        isOpen={isTravelModalOpen}
-        onClose={() => setIsTravelModalOpen(false)}
-        travel={selectedTravel}
-      />
+    <div className="w-full max-w-6xl mx-auto px-2">
+      {/* Título "Viajes Disponibles" */}
+      <h2 className="text-[#FEF801] font-bold text-lg lg:text-3xl ml-4 lg:ml-10 mt-4 mb-4 lg:mb-6">
+        Viajes Disponibles
+      </h2>
+      
+      {/* Contenedor de tarjetas */}
+      <div className="ml-4 lg:ml-10">
+        <TravelContainer />
+      </div>
     </div>
   )}
 

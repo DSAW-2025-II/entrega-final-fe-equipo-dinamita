@@ -27,7 +27,7 @@ export default function MyVehicle() {
 
       try {
         const token = localStorage.getItem("token");
-        const response = await api.get("/vehicle/", {
+        const response = await api.get(`/vehicle/${user.vehicleId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -62,14 +62,14 @@ export default function MyVehicle() {
       const formData = new FormData();
       formData.append("soat", file);
 
-      const response = await api.patch("/vehicle/soat", formData, {
+      const response = await api.patch(`/vehicle/soat/${user.vehicleId}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data.success) {
         setIsSuccess(true);
         // Refrescar la información del vehículo
-        const vehicleResponse = await api.get("/vehicle/", {
+        const vehicleResponse = await api.get(`/vehicle/${user.vehicleId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (vehicleResponse.data.success) {
