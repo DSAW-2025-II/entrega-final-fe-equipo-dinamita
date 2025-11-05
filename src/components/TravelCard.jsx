@@ -3,6 +3,28 @@ import Button from "./Button";
 import Tittle from "./Tittle";
 
 export default function TravelCard({ trip = {}, onOpen = () => {} }) {
+  // Formatear la fecha y hora de salida
+  const formatDepartureTime = (departureTime) => {
+    if (!departureTime) return "—";
+    
+    try {
+      const date = new Date(departureTime);
+      if (isNaN(date.getTime())) return departureTime; // Si no es una fecha válida, devolver el valor original
+      
+      // Formato: "DD/MM/YYYY, HH:MM"
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      
+      return `${day}/${month}/${year}, ${hours}:${minutes}`;
+    } catch (error) {
+      console.error("Error formateando fecha:", error);
+      return departureTime;
+    }
+  };
+
   return (
     <div
       onClick={() => onOpen(trip)}
@@ -40,20 +62,20 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
           className="mb-1 ml-1"
           onClick={() => onOpen(trip)}
         >
-          Puestos: [X]
+          Puestos: {trip.availableSeats}
         </Tittle>
 
-        <p className="text-sm font-bold text-[#1B1B1B]">
-          Punto de partida: {trip.origen || "—"}
+        <p className="text-sm text-[#1B1B1B]">
+          <strong>Punto de partida:</strong> {trip.origen || "—"}
         </p>
-        <p className="text-sm font-bold text-[#1B1B1B]">
-          Destino: {trip.destino || "—"}
+        <p className="text-sm text-[#1B1B1B]">
+          <strong>Destino:</strong> {trip.destino || "—"}
         </p>
-        <p className="text-sm font-bold text-[#1B1B1B]">
-          Hora de salida: {trip.hora || "—"}
+        <p className="text-sm text-[#1B1B1B]">
+          <strong>Fecha y hora de salida:</strong> {formatDepartureTime(trip.departureTime || trip.hora)}
         </p>
-        <p className="text-sm font-bold text-[#1B1B1B]">
-          Tarifa: ${trip.costo || "—"}
+        <p className="text-sm text-[#1B1B1B]">
+          <strong>Tarifa:</strong> {trip.costo || "—"} COP
         </p>
       </div>
     </div>

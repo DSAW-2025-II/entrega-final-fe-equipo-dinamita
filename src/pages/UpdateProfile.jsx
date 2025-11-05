@@ -171,6 +171,14 @@ if (isLoading || !user) {
           >
             Número de celular
           </Button>
+          <Button
+          variant="primary"
+          size="semi"
+          className="!py-1 !px-4"
+          onClick={() => openModalFor("password")}
+          >
+          Contraseña
+        </Button>
         </div>
       </div>
     {/* Modal */}

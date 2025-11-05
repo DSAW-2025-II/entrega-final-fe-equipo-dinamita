@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"; 
 import Tittle from "../components/Tittle"; 
 import TopButtons from "../components/TopButtons"; 
-import TravelCard from "../components/TravelCard";
-import TravelModal from "../components/TravelModal";
+import TravelContainer from "../components/TravelContainer";
 import FilterModal from "../components/FilterModal";
 import LoadingModal from "../components/LoadingModal";
 import Paragraph from "../components/Paragraph";
@@ -14,16 +13,8 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
-  const [selectedTravel, setSelectedTravel] = useState(null);
-  const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
   const toggleFilter = () => setOpenFilter((prev) => !prev);
   const previousUserIdRef = useRef(null);
-
-  // Manejar cuando se hace clic en una tarjeta de viaje
-  const handleTravelClick = (trip) => {
-    setSelectedTravel(trip);
-    setIsTravelModalOpen(true);
-  };
 
   const isDriver = user?.currentRole === "driver";
 

@@ -6,6 +6,7 @@ import api from "../api/axios";
 export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuccess }) {
   const [newValue, setNewValue] = useState("");
   const [confirmValue, setConfirmValue] = useState("");
+  const [currentPassword, setCurrentPassword] = useState(""); // Para contraseña actual
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,6 +15,7 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
     if (isOpen) {
       setNewValue("");
       setConfirmValue("");
+      setCurrentPassword("");
       setError("");
     }
   }, [isOpen, field]);
@@ -25,12 +27,16 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
     name: "Nombre",
     lastName: "Apellidos",
     phone: "Número de celular",
+    password: "Contraseña",
   };
 
   // Obtener el valor actual del campo
   const getCurrentValue = () => {
     if (field === "phone") {
       return user?.contactNumber || "";
+    }
+    if (field === "password") {
+      return ""; // No mostrar la contraseña actual por seguridad
     }
     return user?.[field] || "";
   };
@@ -50,6 +56,16 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
       if (!phoneRegex.test(value.trim())) {
         return "El número de celular debe tener exactamente 10 dígitos";
       }
+    } else if (field === "password") {
+      if (value.trim().length < 8) {
+        return "La contraseña debe tener al menos 8 caracteres";
+      }
+      if (!/\d/.test(value.trim())) {
+        return "La contraseña debe contener al menos un número";
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(value.trim())) {
+        return "La contraseña debe contener al menos un carácter especial";
+      }
     }
 
     return null;
@@ -59,7 +75,60 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
   const handleSubmit = async () => {
     setError("");
 
-    // Validar que ambos campos estén completos
+    // Validación especial para contraseña
+    if (field === "password") {
+      // Validar que todos los campos estén completos
+      if (!currentPassword.trim() || !newValue.trim() || !confirmValue.trim()) {
+        setError("Por favor, completa todos los campos");
+        return;
+      }
+
+      // Validar que la nueva contraseña y confirmación coincidan
+      if (newValue.trim() !== confirmValue.trim()) {
+        setError("Las contraseñas no coinciden");
+        return;
+      }
+
+      // Validar el formato de la nueva contraseña
+      const validationError = validateValue(newValue);
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await api.patch("/users/password", {
+          currentPassword: currentPassword.trim(),
+          newPassword: newValue.trim()
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.data.success) {
+          if (onSuccess) {
+            await onSuccess();
+          }
+          onClose();
+        }
+      } catch (error) {
+        console.error("Error actualizando contraseña:", error);
+        const backendErrors = error.response?.data?.errors;
+        if (backendErrors) {
+          const errorMessage = Object.values(backendErrors).join(", ");
+          setError(errorMessage);
+        } else {
+          setError(error.response?.data?.message || "Error al actualizar la contraseña. Intenta de nuevo.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    // Validación para otros campos
     if (!newValue.trim() || !confirmValue.trim()) {
       setError("Por favor, completa ambos campos");
       return;
@@ -88,6 +157,7 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
+
       const updateData = {};
 
       // Mapear el campo phone a contactNumber
@@ -155,24 +225,58 @@ export default function UpdateProfileModal({ isOpen, onClose, field, user, onSuc
 
         {/* Inputs */}
         <div className="flex flex-col gap-3">
-          <input
-            type={field === "phone" ? "tel" : "text"}
-            placeholder={`Nuevo ${labels[field] || "dato"}`}
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
-            disabled={isLoading}
-          />
-          <input
-            type={field === "phone" ? "tel" : "text"}
-            placeholder="Confirma el dato"
-            value={confirmValue}
-            onChange={(e) => setConfirmValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
-            disabled={isLoading}
-          />
+          {field === "password" ? (
+            <>
+              <input
+                type="password"
+                placeholder="Contraseña actual"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
+                disabled={isLoading}
+              />
+              <input
+                type="password"
+                placeholder="Nueva contraseña"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
+                disabled={isLoading}
+              />
+              <input
+                type="password"
+                placeholder="Confirma la nueva contraseña"
+                value={confirmValue}
+                onChange={(e) => setConfirmValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
+                disabled={isLoading}
+              />
+            </>
+          ) : (
+            <>
+              <input
+                type={field === "phone" ? "tel" : "text"}
+                placeholder={`Nuevo ${labels[field] || "dato"}`}
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
+                disabled={isLoading}
+              />
+              <input
+                type={field === "phone" ? "tel" : "text"}
+                placeholder="Confirma el dato"
+                value={confirmValue}
+                onChange={(e) => setConfirmValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-[#FFFFFF] text-center rounded-full px-4 py-2 text-sm text-[#1b1b1b] placeholder-[#A2A18A] font-inter font-medium border-gray-300 focus:outline-none shadow-lg shadow-black/20"
+                disabled={isLoading}
+              />
+            </>
+          )}
         </div>
 
         {/* Botón */}
