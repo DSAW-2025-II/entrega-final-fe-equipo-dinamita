@@ -22,6 +22,10 @@ export default function NewTrip() {
     navigate("/my-trips");
   };
 
+  const handleError = (messages) => {
+    setErrorMessages(messages);
+  };
+
   // Auto-cerrar el modal de éxito después de 2 segundos
   useEffect(() => {
     if (isSuccess) {
@@ -64,7 +68,7 @@ export default function NewTrip() {
     
       {/* CONTENEDOR CENTRADO */}
       <div className="flex flex-1 items-center justify-center">
-        <CreateTripCard onSuccess={handleSuccess} />
+        <CreateTripCard onSuccess={handleSuccess} onError={handleError} />
       </div>
 
     </div>

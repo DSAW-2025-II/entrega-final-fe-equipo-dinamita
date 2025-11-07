@@ -28,14 +28,14 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
   return (
     <div
       onClick={() => onOpen(trip)}
-      className="relative w-[303px] h-[280px] cursor-pointer"
+      className="relative w-[303px] h-[350px] cursor-pointer"
     >
       {/* Amarillo */}
       <div className="absolute inset-0 bg-[#FCF837] rounded-2xl card-shadow"></div>
 
       {/* Imagen */}
       <div
-        className="absolute top-3 left-3 right-3 h-[90px] bg-cover bg-center rounded-xl"
+        className="absolute top-3 left-3 right-3 h-[110px] bg-cover bg-center rounded-xl"
         style={{
           backgroundImage: `url(${
             trip.image ||
@@ -70,6 +70,9 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
         </p>
         <p className="text-sm text-[#1B1B1B]">
           <strong>Destino:</strong> {trip.destino || "—"}
+        </p>
+        <p className="text-sm text-[#1B1B1B]">
+          <strong>Ruta:</strong> {trip.route || trip.ruta || "—"}
         </p>
         <p className="text-sm text-[#1B1B1B]">
           <strong>Fecha y hora de salida:</strong> {formatDepartureTime(trip.departureTime || trip.hora)}

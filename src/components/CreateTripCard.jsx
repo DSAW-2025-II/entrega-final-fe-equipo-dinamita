@@ -3,7 +3,7 @@ import Button from "./Button";
 import api from "../api/axios";
 import { useUser } from "../hooks/useUser";
 
-const CreateTripCard = ({ onSuccess }) => {
+const CreateTripCard = ({ onSuccess, onError }) => {
   const { user } = useUser();
   const [formData, setFormData] = useState({
     departurePoint: "",
@@ -153,8 +153,15 @@ const CreateTripCard = ({ onSuccess }) => {
       } catch (error) {
         // Manejo de errores similar al de Register
         const backendErrors = error.response?.data?.errors;
+        const errorMessage = error.response?.data?.message;
         
-        if (backendErrors && typeof backendErrors === "object") {
+        // Si es un error de "viaje en curso", pasarlo al componente padre para mostrar modal
+        if (errorMessage && errorMessage.includes("Ya tienes un viaje en curso")) {
+          if (onError) {
+            onError([errorMessage]);
+          }
+          setErrors({ general: errorMessage });
+        } else if (backendErrors && typeof backendErrors === "object") {
           const newErrors = {};
           Object.entries(backendErrors).forEach(([key, val]) => {
             if (Array.isArray(val)) {
@@ -168,8 +175,8 @@ const CreateTripCard = ({ onSuccess }) => {
           setErrors(newErrors);
         } else {
           // Error general
-          const errorMessage = error.response?.data?.message || "Error al crear el viaje. Intenta de nuevo.";
-          setErrors({ general: errorMessage });
+          const generalError = errorMessage || "Error al crear el viaje. Intenta de nuevo.";
+          setErrors({ general: generalError });
         }
       } finally {
         setIsLoading(false);
