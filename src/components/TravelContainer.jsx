@@ -3,8 +3,10 @@ import TravelCard from "./TravelCard";
 import TravelModal from "./TravelModal";
 import LoadingModal from "./LoadingModal";
 import api from "../api/axios";
+import { useUser } from "../hooks/useUser";
 
 export default function TravelContainer() {
+  const { user } = useUser();
   const [rides, setRides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
@@ -28,7 +30,7 @@ export default function TravelContainer() {
 
         if (response.data.success) {
           // Mapear los datos del backend al formato que espera TravelCard
-          const mappedRides = response.data.rides.map((ride) => {
+          let mappedRides = response.data.rides.map((ride) => {
             return {
               id: ride.id,
               image: ride.image || null, // Imagen del vehículo
@@ -52,8 +54,14 @@ export default function TravelContainer() {
               vehicle: ride.vehicle || {},
               status: ride.status,
               passengers: ride.passengers || [],
+              driverId: ride.driverId, // Agregar driverId para poder filtrar
             };
           });
+
+          // Filtrar los viajes del usuario si está autenticado (medida adicional en frontend)
+          if (user && user.id) {
+            mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
+          }
 
           setRides(mappedRides);
         }
@@ -66,7 +74,7 @@ export default function TravelContainer() {
     };
 
     fetchAllRides();
-  }, []);
+  }, [user]);
 
   if (isLoading) {
     return (
