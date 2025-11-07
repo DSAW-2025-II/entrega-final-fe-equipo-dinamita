@@ -62,12 +62,31 @@ export default function DriverTravelCard({ trip = {}, onCancel = () => {} }) {
                 Pasajeros ({passengers.length})
               </p>
               {passengers.length > 0 ? (
-                <div className="space-y-1">
-                  {passengers.map((passenger, index) => (
-                    <p key={index} className="text-xs text-[#1B1B1B] pl-2">
-                      • {passenger.name || passenger || `Pasajero ${index + 1}`}
-                    </p>
-                  ))}
+                <div className="space-y-2">
+                  {passengers.map((passenger, index) => {
+                    // Manejar diferentes formatos de pasajero
+                    const passengerName = typeof passenger === 'string' ? passenger : (passenger?.name || `Pasajero ${index + 1}`);
+                    const passengerContact = typeof passenger === 'object' ? (passenger?.contact || passenger?.contactNumber || null) : null;
+                    const passengerPoint = typeof passenger === 'object' ? passenger?.point : null;
+                    
+                    return (
+                      <div key={index} className="text-xs text-[#1B1B1B] pl-2">
+                        <p className="font-semibold">
+                          • {passengerName}
+                          {passengerContact && (
+                            <span className="font-normal ml-2 text-[#1B1B1B]">
+                              - {passengerContact}
+                            </span>
+                          )}
+                        </p>
+                        {passengerPoint && (
+                          <p className="text-[#1B1B1B]/70 italic ml-2 mt-0.5">
+                            {passengerPoint}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-xs text-[#1B1B1B]/60 italic pl-2">

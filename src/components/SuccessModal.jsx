@@ -13,7 +13,7 @@ const SuccessModal = ({ message, onClose }) => {
   }, [onClose]);
   
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[100]">
       <div className="relative bg-[#D8D8C0] rounded-[38px] border-[9px] border-[#FEF801] shadow-md w-[330px] md:w-[430px] py-8 px-4 flex flex-col items-center">
         {/* Botón cerrar X */}
         <button

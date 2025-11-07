@@ -109,6 +109,60 @@ export default function TravelContainer() {
         isOpen={isTravelModalOpen}
         onClose={() => setIsTravelModalOpen(false)}
         travel={selectedTravel}
+        onSuccess={() => {
+          // Recargar los viajes después de una solicitud exitosa
+          const fetchAllRides = async () => {
+            setIsLoading(true);
+            try {
+              const token = localStorage.getItem("token");
+              const headers = token ? { Authorization: `Bearer ${token}` } : {};
+              
+              const response = await api.get("/rides", { headers });
+
+              if (response.data.success) {
+                let mappedRides = response.data.rides.map((ride) => {
+                  return {
+                    id: ride.id,
+                    image: ride.image || null,
+                    origen: ride.departurePoint || "—",
+                    destino: ride.destinationPoint || "—",
+                    ruta: ride.route || "—",
+                    hora: null,
+                    costo: ride.pricePassenger || "—",
+                    puestos: ride.availableSeats || ride.capacity || 0,
+                    capacidad: ride.capacity || 0,
+                    availableSeats: ride.availableSeats || ride.capacity || 0,
+                    departurePoint: ride.departurePoint,
+                    destinationPoint: ride.destinationPoint,
+                    route: ride.route,
+                    departureTime: ride.departureTime,
+                    pricePassenger: ride.pricePassenger,
+                    capacity: ride.capacity,
+                    driverName: ride.driverName,
+                    driverContact: ride.driverContact,
+                    vehicle: ride.vehicle || {},
+                    status: ride.status,
+                    passengers: ride.passengers || [],
+                    driverId: ride.driverId,
+                  };
+                });
+
+                if (user && user.id) {
+                  mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
+                }
+
+                setRides(mappedRides);
+              }
+            } catch (error) {
+              console.error("Error obteniendo viajes:", error);
+              setRides([]);
+            } finally {
+              setIsLoading(false);
+            }
+          };
+
+          fetchAllRides();
+        }}
       />
     </>
   );
