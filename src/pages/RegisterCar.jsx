@@ -10,7 +10,7 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 
-const MAX_FILE_SIZE_MB = 3;
+const MAX_FILE_SIZE_MB = 2;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export default function RegisterCar() {
@@ -109,10 +109,12 @@ export default function RegisterCar() {
 
     try {
       const compressed = await imageCompression(file, {
-        maxSizeMB: 2.5,
-        maxWidthOrHeight: 1600,
+        maxSizeMB: 1.4,
+        maxWidthOrHeight: 1400,
         useWebWorker: true,
         alwaysKeepResolution: false,
+        fileType: "image/jpeg",
+        initialQuality: 0.7,
       });
 
       if (compressed.size > MAX_FILE_SIZE_BYTES) {
@@ -148,10 +150,12 @@ export default function RegisterCar() {
     try {
       const processedFile = isImage
         ? await imageCompression(file, {
-            maxSizeMB: 2.5,
-            maxWidthOrHeight: 1600,
+            maxSizeMB: 1.4,
+            maxWidthOrHeight: 1400,
             useWebWorker: true,
             alwaysKeepResolution: false,
+            fileType: "image/jpeg",
+            initialQuality: 0.7,
           })
         : file;
 
