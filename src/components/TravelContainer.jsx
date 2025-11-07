@@ -31,6 +31,11 @@ export default function TravelContainer() {
         if (response.data.success) {
           // Mapear los datos del backend al formato que espera TravelCard
           let mappedRides = response.data.rides.map((ride) => {
+            // Usar nullish coalescing (??) en lugar de || para que 0 no se trate como falsy
+            const availableSeats = ride.availableSeats !== undefined && ride.availableSeats !== null 
+              ? ride.availableSeats 
+              : (ride.capacity ?? 0);
+            
             return {
               id: ride.id,
               image: ride.image || null, // Imagen del vehículo
@@ -39,9 +44,9 @@ export default function TravelContainer() {
               ruta: ride.route || "—",
               hora: null, // No usamos hora formateada aquí, se formatea en TravelCard
               costo: ride.pricePassenger || "—",
-              puestos: ride.availableSeats || ride.capacity || 0,
-              capacidad: ride.capacity || 0,
-              availableSeats: ride.availableSeats || ride.capacity || 0,
+              puestos: availableSeats,
+              capacidad: ride.capacity ?? 0,
+              availableSeats: availableSeats,
               // Datos adicionales para el modal
               departurePoint: ride.departurePoint,
               destinationPoint: ride.destinationPoint,
@@ -62,6 +67,9 @@ export default function TravelContainer() {
           if (user && user.id) {
             mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
           }
+
+          // Filtrar viajes sin asientos disponibles
+          mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
 
           setRides(mappedRides);
         }
@@ -121,6 +129,11 @@ export default function TravelContainer() {
 
               if (response.data.success) {
                 let mappedRides = response.data.rides.map((ride) => {
+                  // Usar nullish coalescing (??) en lugar de || para que 0 no se trate como falsy
+                  const availableSeats = ride.availableSeats !== undefined && ride.availableSeats !== null 
+                    ? ride.availableSeats 
+                    : (ride.capacity ?? 0);
+                  
                   return {
                     id: ride.id,
                     image: ride.image || null,
@@ -129,9 +142,9 @@ export default function TravelContainer() {
                     ruta: ride.route || "—",
                     hora: null,
                     costo: ride.pricePassenger || "—",
-                    puestos: ride.availableSeats || ride.capacity || 0,
-                    capacidad: ride.capacity || 0,
-                    availableSeats: ride.availableSeats || ride.capacity || 0,
+                    puestos: availableSeats,
+                    capacidad: ride.capacity ?? 0,
+                    availableSeats: availableSeats,
                     departurePoint: ride.departurePoint,
                     destinationPoint: ride.destinationPoint,
                     route: ride.route,
@@ -150,6 +163,9 @@ export default function TravelContainer() {
                 if (user && user.id) {
                   mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
                 }
+
+                // Filtrar viajes sin asientos disponibles
+                mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
 
                 setRides(mappedRides);
               }

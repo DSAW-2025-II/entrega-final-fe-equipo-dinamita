@@ -7,10 +7,12 @@ export default function DriverTravelCard({ trip = {}, onCancel = () => {} }) {
     if (!departureTime) return "—";
     
     try {
+      // Si es un string ISO, usar directamente
+      // Si viene del backend como ISO string en UTC, convertirlo a hora local
       const date = new Date(departureTime);
       if (isNaN(date.getTime())) return departureTime;
       
-      // Formato: "DD/MM/YYYY, HH:MM"
+      // Usar métodos que respetan la zona horaria local del navegador
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();

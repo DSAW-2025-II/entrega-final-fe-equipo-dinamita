@@ -60,10 +60,12 @@ export default function TravelModal({ isOpen, onClose, travel, onSuccess }) {
     if (!departureTime) return "—";
     
     try {
+      // Si es un string ISO, usar directamente
+      // Si viene del backend como ISO string en UTC, convertirlo a hora local
       const date = new Date(departureTime);
       if (isNaN(date.getTime())) return departureTime; // Si no es una fecha válida, devolver el valor original
       
-      // Formato: "DD/MM/YYYY HH:MM"
+      // Usar métodos que respetan la zona horaria local del navegador
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
@@ -88,7 +90,10 @@ export default function TravelModal({ isOpen, onClose, travel, onSuccess }) {
 
   const handleIncrease = () => {
     setTickets((prev) => {
-      const maxSeatsRaw = travel?.availableSeats ?? travel?.capacity ?? 4;
+      // Asegurar que availableSeats se maneje correctamente cuando es 0
+      const maxSeatsRaw = (travel?.availableSeats !== undefined && travel?.availableSeats !== null) 
+        ? travel.availableSeats 
+        : (travel?.capacity ?? 4);
       const maxSeats = Math.max(0, maxSeatsRaw);
       const updated = Math.min(maxSeats, prev + 1);
       return updated;
