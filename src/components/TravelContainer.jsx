@@ -3,8 +3,10 @@ import TravelCard from "./TravelCard";
 import TravelModal from "./TravelModal";
 import LoadingModal from "./LoadingModal";
 import api from "../api/axios";
+import { useUser } from "../hooks/useUser";
 
 export default function TravelContainer() {
+  const { user } = useUser();
   const [rides, setRides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
@@ -28,7 +30,12 @@ export default function TravelContainer() {
 
         if (response.data.success) {
           // Mapear los datos del backend al formato que espera TravelCard
-          const mappedRides = response.data.rides.map((ride) => {
+          let mappedRides = response.data.rides.map((ride) => {
+            // Usar nullish coalescing (??) en lugar de || para que 0 no se trate como falsy
+            const availableSeats = ride.availableSeats !== undefined && ride.availableSeats !== null 
+              ? ride.availableSeats 
+              : (ride.capacity ?? 0);
+            
             return {
               id: ride.id,
               image: ride.image || null, // Imagen del vehículo
@@ -37,9 +44,9 @@ export default function TravelContainer() {
               ruta: ride.route || "—",
               hora: null, // No usamos hora formateada aquí, se formatea en TravelCard
               costo: ride.pricePassenger || "—",
-              puestos: ride.availableSeats || ride.capacity || 0,
-              capacidad: ride.capacity || 0,
-              availableSeats: ride.availableSeats || ride.capacity || 0,
+              puestos: availableSeats,
+              capacidad: ride.capacity ?? 0,
+              availableSeats: availableSeats,
               // Datos adicionales para el modal
               departurePoint: ride.departurePoint,
               destinationPoint: ride.destinationPoint,
@@ -52,8 +59,17 @@ export default function TravelContainer() {
               vehicle: ride.vehicle || {},
               status: ride.status,
               passengers: ride.passengers || [],
+              driverId: ride.driverId, // Agregar driverId para poder filtrar
             };
           });
+
+          // Filtrar los viajes del usuario si está autenticado (medida adicional en frontend)
+          if (user && user.id) {
+            mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
+          }
+
+          // Filtrar viajes sin asientos disponibles
+          mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
 
           setRides(mappedRides);
         }
@@ -66,7 +82,7 @@ export default function TravelContainer() {
     };
 
     fetchAllRides();
-  }, []);
+  }, [user]);
 
   if (isLoading) {
     return (
@@ -101,6 +117,68 @@ export default function TravelContainer() {
         isOpen={isTravelModalOpen}
         onClose={() => setIsTravelModalOpen(false)}
         travel={selectedTravel}
+        onSuccess={() => {
+          // Recargar los viajes después de una solicitud exitosa
+          const fetchAllRides = async () => {
+            setIsLoading(true);
+            try {
+              const token = localStorage.getItem("token");
+              const headers = token ? { Authorization: `Bearer ${token}` } : {};
+              
+              const response = await api.get("/rides", { headers });
+
+              if (response.data.success) {
+                let mappedRides = response.data.rides.map((ride) => {
+                  // Usar nullish coalescing (??) en lugar de || para que 0 no se trate como falsy
+                  const availableSeats = ride.availableSeats !== undefined && ride.availableSeats !== null 
+                    ? ride.availableSeats 
+                    : (ride.capacity ?? 0);
+                  
+                  return {
+                    id: ride.id,
+                    image: ride.image || null,
+                    origen: ride.departurePoint || "—",
+                    destino: ride.destinationPoint || "—",
+                    ruta: ride.route || "—",
+                    hora: null,
+                    costo: ride.pricePassenger || "—",
+                    puestos: availableSeats,
+                    capacidad: ride.capacity ?? 0,
+                    availableSeats: availableSeats,
+                    departurePoint: ride.departurePoint,
+                    destinationPoint: ride.destinationPoint,
+                    route: ride.route,
+                    departureTime: ride.departureTime,
+                    pricePassenger: ride.pricePassenger,
+                    capacity: ride.capacity,
+                    driverName: ride.driverName,
+                    driverContact: ride.driverContact,
+                    vehicle: ride.vehicle || {},
+                    status: ride.status,
+                    passengers: ride.passengers || [],
+                    driverId: ride.driverId,
+                  };
+                });
+
+                if (user && user.id) {
+                  mappedRides = mappedRides.filter(ride => ride.driverId !== user.id);
+                }
+
+                // Filtrar viajes sin asientos disponibles
+                mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
+
+                setRides(mappedRides);
+              }
+            } catch (error) {
+              console.error("Error obteniendo viajes:", error);
+              setRides([]);
+            } finally {
+              setIsLoading(false);
+            }
+          };
+
+          fetchAllRides();
+        }}
       />
     </>
   );

@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
       
       if (!token) {
         clearUser();
-        navigate("/login");
+        // No redirigir aquí, dejar que ProtectedRoute maneje la autenticación
         return;
       }
 
@@ -42,12 +42,12 @@ export const UserProvider = ({ children }) => {
       setError(err);
       setUser(null);
       
-      // Si hay error de autenticación, redirigir a login
+      // Si hay error de autenticación, limpiar token pero no redirigir
+      // ProtectedRoute se encargará de la redirección
       if (err.response?.status === 401 || err.response?.status === 403) {
         clearUser();
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login");
       }
     } finally {
       setIsLoading(false);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import imageCompression from "browser-image-compression";
 import Tittle from "../components/Tittle";
 import Button from "../components/Button";
 import TopButtons from "../components/TopButtons";
@@ -8,6 +9,9 @@ import ErrorModal from "../components/ErrorModal";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+
+const MAX_FILE_SIZE_MB = 2;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export default function RegisterCar() {
   const navigate = useNavigate();
@@ -96,20 +100,79 @@ export default function RegisterCar() {
   // Handler para foto del vehículo
   const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setPhoto(file);
-      const preview = URL.createObjectURL(file);
-      setPhotoPreview(preview);
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setErrors((prev) => ({ ...prev, photo: "La foto debe ser una imagen" }));
+      return;
+    }
+
+    try {
+      const compressed = await imageCompression(file, {
+        maxSizeMB: 1.4,
+        maxWidthOrHeight: 1400,
+        useWebWorker: true,
+        alwaysKeepResolution: false,
+        fileType: "image/jpeg",
+        initialQuality: 0.7,
+      });
+
+      if (compressed.size > MAX_FILE_SIZE_BYTES) {
+        setErrors((prev) => ({
+          ...prev,
+          photo: `La foto debe pesar menos de ${MAX_FILE_SIZE_MB}MB. Reduce la resolución e inténtalo de nuevo.`,
+        }));
+        return;
+      }
+
+      setErrors((prev) => ({ ...prev, photo: "" }));
+      setPhoto(compressed);
+      setPhotoPreview(URL.createObjectURL(compressed));
+    } catch (error) {
+      console.error("Error comprimiendo foto:", error);
+      setErrors((prev) => ({ ...prev, photo: "No se pudo procesar la imagen. Intenta con otra." }));
     }
   };
 
   // Handler para foto del SOAT
   const handleSoatUpload = async (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setSoat(file);
-      const preview = URL.createObjectURL(file);
-      setSoatPreview(preview);
+    if (!file) return;
+
+    const isImage = file.type.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+
+    if (!isImage && !isPdf) {
+      setErrors((prev) => ({ ...prev, soat: "Solo se permiten imágenes o PDF" }));
+      return;
+    }
+
+    try {
+      const processedFile = isImage
+        ? await imageCompression(file, {
+            maxSizeMB: 1.4,
+            maxWidthOrHeight: 1400,
+            useWebWorker: true,
+            alwaysKeepResolution: false,
+            fileType: "image/jpeg",
+            initialQuality: 0.7,
+          })
+        : file;
+
+      if (processedFile.size > MAX_FILE_SIZE_BYTES) {
+        setErrors((prev) => ({
+          ...prev,
+          soat: `El archivo de SOAT debe pesar menos de ${MAX_FILE_SIZE_MB}MB. Comprímelo e inténtalo de nuevo.`,
+        }));
+        return;
+      }
+
+      setErrors((prev) => ({ ...prev, soat: "" }));
+      setSoat(processedFile);
+      setSoatPreview(isImage ? URL.createObjectURL(processedFile) : null);
+    } catch (error) {
+      console.error("Error procesando SOAT:", error);
+      setErrors((prev) => ({ ...prev, soat: "No se pudo procesar el archivo. Intenta con otro." }));
     }
   };
 
@@ -132,8 +195,17 @@ export default function RegisterCar() {
     if (!formData.capacity || parseInt(formData.capacity) < 1 || parseInt(formData.capacity) > 4) {
       newErrors.capacity = "Capacidad debe ser entre 1 y 4";
     }
-    if (!photo) newErrors.photo = "Foto del vehículo es requerida";
-    if (!soat) newErrors.soat = "Foto del SOAT es requerida";
+    if (!photo) {
+      newErrors.photo = "Foto del vehículo es requerida";
+    } else if (photo.size > MAX_FILE_SIZE_BYTES) {
+      newErrors.photo = `La foto del vehículo debe pesar menos de ${MAX_FILE_SIZE_MB}MB`;
+    }
+
+    if (!soat) {
+      newErrors.soat = "Foto del SOAT es requerida";
+    } else if (soat.size > MAX_FILE_SIZE_BYTES) {
+      newErrors.soat = `El archivo de SOAT debe pesar menos de ${MAX_FILE_SIZE_MB}MB`;
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -323,7 +395,7 @@ export default function RegisterCar() {
           <Tittle size="semi" className="bg-[#FEF801] px-7 py-2 mb-2 mt-2 shadow-md text-black">Foto del SOAT</Tittle>
           <input
             type="file"
-            accept="image/*"
+            accept="image/*,.pdf"
             onChange={handleSoatUpload}
             className="hidden"
             id="soat-photo-input"

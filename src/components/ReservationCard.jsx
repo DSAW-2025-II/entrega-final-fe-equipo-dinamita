@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./Button";
 import Tittle from "./Tittle";
 
-export default function TravelCard({ trip = {}, onOpen = () => {} }) {
+export default function ReservationCard({ reservation = {}, onOpen = () => {} }) {
   // Formatear la fecha y hora de salida
   const formatDepartureTime = (departureTime) => {
     if (!departureTime) return "—";
@@ -11,10 +11,9 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
       // Si es un string ISO, usar directamente
       // Si viene del backend como ISO string en UTC, convertirlo a hora local
       const date = new Date(departureTime);
-      if (isNaN(date.getTime())) return departureTime; // Si no es una fecha válida, devolver el valor original
+      if (isNaN(date.getTime())) return departureTime;
       
       // Usar métodos que respetan la zona horaria local del navegador
-      // Formato: "DD/MM/YYYY, HH:MM"
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
@@ -30,7 +29,7 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
 
   return (
     <div
-      onClick={() => onOpen(trip)}
+      onClick={() => onOpen(reservation)}
       className="relative w-[303px] h-[350px] cursor-pointer"
     >
       {/* Amarillo */}
@@ -41,7 +40,7 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
         className="absolute top-3 left-3 right-3 h-[110px] bg-cover bg-center rounded-xl"
         style={{
           backgroundImage: `url(${
-            trip.image ||
+            reservation.image ||
             "https://via.placeholder.com/300x150/FE0144/FFF?text=Sin+imagen"
           })`,
         }}
@@ -49,41 +48,35 @@ export default function TravelCard({ trip = {}, onOpen = () => {} }) {
 
       {/* Info box */}
       <div className="absolute bottom-3 left-3 right-3 bg-[#FFFEE5] rounded-xl p-3">
-        {/* Botón ruta */}
-        <Tittle
-          variant="primary"
-          size="semi"
-          className="mb-1"
-          onClick={() => onOpen(trip)}
-        >
-          Ver ruta
-        </Tittle>
+        {/* Botón ver detalles */}
+        
 
         <Tittle
           variant="primary"
           size="semi"
           className="mb-1 ml-1"
-          onClick={() => onOpen(trip)}
+          onClick={() => onOpen(reservation)}
         >
-          Puestos: {trip.availableSeats}
+          Pasajes: {reservation.totalTickets || 0}
         </Tittle>
 
         <p className="text-sm text-[#1B1B1B]">
-          <strong>Punto de partida:</strong> {trip.origen || "—"}
+          <strong>Punto de partida:</strong> {reservation.departurePoint || "—"}
         </p>
         <p className="text-sm text-[#1B1B1B]">
-          <strong>Destino:</strong> {trip.destino || "—"}
+          <strong>Destino:</strong> {reservation.destinationPoint || "—"}
         </p>
         <p className="text-sm text-[#1B1B1B]">
-          <strong>Ruta:</strong> {trip.route || trip.ruta || "—"}
+          <strong>Ruta:</strong> {reservation.route || "—"}
         </p>
         <p className="text-sm text-[#1B1B1B]">
-          <strong>Fecha y hora de salida:</strong> {formatDepartureTime(trip.departureTime || trip.hora)}
+          <strong>Fecha y hora de salida:</strong> {formatDepartureTime(reservation.departureTime)}
         </p>
         <p className="text-sm text-[#1B1B1B]">
-          <strong>Tarifa:</strong> {trip.costo || "—"} COP
+          <strong>Tarifa:</strong> {reservation.pricePassenger || "—"} COP
         </p>
       </div>
     </div>
   );
 }
+
