@@ -138,36 +138,71 @@ export default function MyVehicle() {
 
       {vehicle ? (
         <div className="flex flex-col lg:flex-row justify-center gap-6 w-full max-w-6xl mx-auto px-4">
-          {/* Columna izquierda: Información del vehículo */}
-          <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col py-8 px-8 w-full max-w-md mx-auto">
-            <Tittle size="semi" className="bg-[#FEF801] px-6 py-2 mb-6 shadow-md text-black text-center">
-              Información del vehículo
-            </Tittle>
-            
-            <div className="space-y-4">
-              <div>
-                <p className="text-black text-xl font-semibold">Placa: {vehicle.plate}</p>
-              </div>
-              
-              <div>
-                <p className="text-black text-xl font-semibold">Marca: {vehicle.brand}</p>
-              </div>
-              
-              <div>
-                <p className="text-black text-xl font-semibold">Modelo: {vehicle.model}</p>
-              </div>
-              
-              <div>
-                <p className="text-black text-xl font-semibold">Color: {vehicle.color}</p>
-              </div>
-              
-              <div>
-                <p className="text-black text-xl font-semibold">Capacidad: {vehicle.capacity} {vehicle.capacity === 1 ? 'pasajero' : 'pasajeros'}</p>
-              </div>
+           {/* 🔹 Columna izquierda (nuevo diseño) */}
+          <div className="relative bg-[#1B1B1B] rounded-[28px] shadow-lg w-[390px] max-w-md mx-auto overflow-visible pb-6 vehicle-shadow" >
+            <div className="relative flex justify-center items-center">
+            {vehicle.photo ? (
+                <img
+                  src={vehicle.photo}
+                  alt="Vehículo"
+                  className="w-[320px] h-[200px] object-cover rounded-[20px] shadow-lg mt-6 z-10 relative"
+                />
+              ) : (
+                <div className="w-90 max-w-xs h-38 bg-gray-300 rounded-lg flex items-center justify-center">
+                  <p className="text-black">Sin foto</p>
+                </div>
+              )}
             </div>
 
+            {/* Fondo amarillo claro */}
+            <div className="bg-[#FFFEE5] rounded-[17px] mx-4 mt-[-16px] p-5 shadow-md text-black">
+             
+              <p className="font-bold text-lg">Marca: <span className="font-normal">{vehicle.brand}</span></p>
+              <p className="font-bold text-lg">Modelo: <span className="font-normal">{vehicle.model}</span></p>
+              <p className="font-bold text-lg">Color: <span className="font-normal">{vehicle.color}</span></p>
+              <p className="font-bold text-lg">Capacidad de pasajeros: <span className="font-normal">{vehicle.capacity}</span></p>
+
+              {/* PLACA */}
+              <div className="text-center mt-4">
+                <p className="font-extrabold text-black text-lg mb-2">PLACA</p>
+                <div className="flex justify-center gap-2">
+                  {vehicle.plate.split("").map((char, i) => (
+                    <div
+                      key={i}
+                      className="bg-[#FEF801] w-10 h-14 rounded-md shadow-md flex items-center justify-center font-bold text-black text-xl"
+                    >
+                      {char}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Columna derecha: Fotos del vehículo y SOAT */}
+          <div className="flex flex-col gap-6 mx-auto">
+            <Tittle size="semi"
+             className="mb-4 shadow-md mx-auto text-xl lg:text-3xl">
+                Tu SOAT
+              </Tittle>
+            {/* Foto del SOAT */}
+            <div className="bg-[#D2D1BE] rounded-[20px] w-100 shadow-lg border-[#1B1B1B] border-20 flex flex-col items-center py-6 px-6">
+              
+              {vehicle.soat ? (
+                <img
+                  src={vehicle.soat}
+                  alt="SOAT"
+                  className="w-90 max-w-xs rounded-lg shadow-md"
+                />
+              ) : (
+                <div className="w-full
+                 max-w-xs h-48 bg-gray-300 rounded-lg flex items-center justify-center">
+                  <p className="text-black">Sin SOAT</p>
+                </div>
+              )}
+            </div>
             {/* Botón para actualizar SOAT */}
-            <div className="mt-6">
+            <div className="-mt-1">
               <label className="block">
                 <input
                   type="file"
@@ -178,51 +213,12 @@ export default function MyVehicle() {
                 />
                 <Button
                   size="medium"
-                  className="w-full"
+                  className="ml-15"
                   onClick={() => document.getElementById('soat-upload').click()}
                 >
-                  Actualizar SOAT
+                  Actualiza tu SOAT
                 </Button>
               </label>
-            </div>
-          </div>
-
-          {/* Columna derecha: Fotos del vehículo y SOAT */}
-          <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
-            {/* Foto del vehículo */}
-            <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-6 px-6">
-              <Tittle size="semi" className="bg-[#FEF801] px-6 py-2 mb-4 shadow-md text-black">
-                Foto del vehículo
-              </Tittle>
-              {vehicle.photo ? (
-                <img
-                  src={vehicle.photo}
-                  alt="Vehículo"
-                  className="w-full max-w-xs rounded-lg shadow-md"
-                />
-              ) : (
-                <div className="w-full max-w-xs h-48 bg-gray-300 rounded-lg flex items-center justify-center">
-                  <p className="text-black">Sin foto</p>
-                </div>
-              )}
-            </div>
-
-            {/* Foto del SOAT */}
-            <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-6 px-6">
-              <Tittle size="semi" className="bg-[#FEF801] px-6 py-2 mb-4 shadow-md text-black">
-                SOAT
-              </Tittle>
-              {vehicle.soat ? (
-                <img
-                  src={vehicle.soat}
-                  alt="SOAT"
-                  className="w-full max-w-xs rounded-lg shadow-md"
-                />
-              ) : (
-                <div className="w-full max-w-xs h-48 bg-gray-300 rounded-lg flex items-center justify-center">
-                  <p className="text-black">Sin SOAT</p>
-                </div>
-              )}
             </div>
           </div>
         </div>

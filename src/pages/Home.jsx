@@ -122,14 +122,9 @@ export default function Home() {
     </div>
   ) : (
     // Si es passenger, mostrar las tarjetas de viaje
-    <div>
-      <div className="grid grid-cols-4 gap-6 px-10 mt-10">
-      <TravelCard onOpen={handleTravelClick} />
-      <TravelModal 
-        isOpen={isTravelModalOpen}
-        onClose={() => setIsTravelModalOpen(false)}
-        travel={selectedTravel}
-      />
+    <div className="w-full max-w-6xl mx-auto px-2">
+      <div className="ml-8 mt-2 lg:-ml-4 lg:mt-4 mb-8">
+        <TravelContainer />
       </div>
     </div>
   )}

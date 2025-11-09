@@ -99,7 +99,7 @@ if (isLoading || !user) {
         <Tittle
             variant="primary"
             size="extraLarge"
-            className="self-start ml-10 mt-6">
+            className="self-start ml-10 mt-20 lg:mt-6">
                 Actualiza tus datos
         </Tittle>
 
@@ -107,13 +107,13 @@ if (isLoading || !user) {
         </div>
 
       {/* Sección de foto */}
-      <div className="flex flex-col items-center mt-6 gap-6 lg:flex-row lg:items-start lg:gap-8">
+      <div className="flex flex-col items-center mt-0 lg:mt-6 gap-6 lg:flex-row lg:items-start lg:gap-8">
         {/* Columna izquierda: texto + foto */}
         <div className="flex flex-col items-center lg:items-start lg:ml-3">
           <Paragraph
             size="medium"
             color="text-[#FEF801]"
-            className="mb-2 mt-2 text-center lg:text-left"
+            className="text-center self-center ml-0 mt-6 lg:text-left lg:self-start lg:ml-22"
           >
             Tu foto:
           </Paragraph>
@@ -136,7 +136,7 @@ if (isLoading || !user) {
               <Button
                 variant="primary"
                 size="semi"
-                className="!py-1 !px-4"
+                className="!py-1 !px-4 lg:ml-11"
                 onClick={() => document.getElementById('photo-upload').click()}
               >
                 Actualizar foto

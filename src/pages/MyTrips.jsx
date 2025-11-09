@@ -4,6 +4,7 @@ import TopButtons from "../components/TopButtons";
 import TravelCard from "../components/TravelCard";
 import TravelModal from "../components/TravelModal";
 import LoadingModal from "../components/LoadingModal";
+import InfoMyTrips from "../components/InfoMyTrips";
 import { useUser } from "../hooks/useUser";
 import api from "../api/axios";
 
@@ -12,12 +13,12 @@ export default function MyTrips() {
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
-  const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
+  const [isInfoMyTripsOpen, setIsInfoMyTripsOpen] = useState(false);
 
   // Manejar cuando se hace clic en una tarjeta de viaje
   const handleTravelClick = (trip) => {
     setSelectedTravel(trip);
-    setIsTravelModalOpen(true);
+    setIsInfoMyTripsOpen(true);
   };
 
   // Obtener viajes del conductor
@@ -67,9 +68,6 @@ export default function MyTrips() {
               pricePassenger: ride.pricePassenger,
               availableSeats: ride.availableSeats,
               capacity: ride.capacity,
-              driverName: ride.driverName,
-              driverContact: ride.driverContact,
-              vehicle: ride.vehicle,
               status: ride.status,
               passengers: ride.passengers || [],
             };
@@ -125,9 +123,9 @@ export default function MyTrips() {
               />
             ))}
           </div>
-          <TravelModal
-            isOpen={isTravelModalOpen}
-            onClose={() => setIsTravelModalOpen(false)}
+          <InfoMyTrips
+            isOpen={isInfoMyTripsOpen}
+            onClose={() => setIsInfoMyTripsOpen(false)}
             travel={selectedTravel}
           />
         </div>

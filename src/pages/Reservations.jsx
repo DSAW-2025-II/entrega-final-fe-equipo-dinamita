@@ -9,7 +9,7 @@ export default function Reservations() {
       <Tittle
         variant="primary"
         size="extraLarge"
-        className="self-start ml-10 mt-6"
+        className="self-start ml-10 mt-20 lg:mt-6"
       >
         Mis reservas
       </Tittle>

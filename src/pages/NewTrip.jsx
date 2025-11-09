@@ -54,7 +54,7 @@ export default function NewTrip() {
         <Tittle
           variant="primary"
           size="extraLarge"
-          className="self-start ml-4 lg:ml-10 mt-4 lg:mt-6">
+          className="self-start ml-10 lg:ml-10 mt-20 lg:mt-6">
           Crea un nuevo viaje
         </Tittle>
 
