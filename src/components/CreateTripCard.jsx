@@ -29,7 +29,7 @@ const CreateTripCard = ({ onSuccess, onError }) => {
 
       try {
         const token = localStorage.getItem("token");
-        const response = await api.get(`/vehicles/${user.vehicleId}`, {
+        const response = await api.get(`/vehicle/${user.vehicleId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
