@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./Button";
 import Tittle from "./Tittle";
 
-export default function ReservationCard({ reservation = {}, onOpen = () => {} }) {
+export default function ReservationCard({ reservation = {}, onOpen = () => {}, onCancel = () => {} }) {
   // Formatear la fecha y hora de salida
   const formatDepartureTime = (departureTime) => {
     if (!departureTime) return "—";
@@ -75,6 +75,20 @@ export default function ReservationCard({ reservation = {}, onOpen = () => {} })
         <p className="text-sm text-[#1B1B1B]">
           <strong>Tarifa:</strong> {reservation.pricePassenger || "—"} COP
         </p>
+        
+        {/* Botón cancelar solicitud */}
+        <div className="flex justify-center mt-2">
+          <Button
+            variant="danger"
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCancel(reservation);
+            }}
+          >
+            Cancelar solicitud
+          </Button>
+        </div>
       </div>
     </div>
   );

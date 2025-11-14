@@ -3,6 +3,8 @@ import Tittle from "../components/Tittle";
 import TopButtons from "../components/TopButtons";
 import ReservationCard from "../components/ReservationCard";
 import LoadingModal from "../components/LoadingModal";
+import SuccessModal from "../components/SuccessModal";
+import ErrorModal from "../components/ErrorModal";
 import api from "../api/axios";
 import { useUser } from "../hooks/useUser";
 
@@ -10,6 +12,8 @@ export default function Reservations() {
   const { user, isLoading: isLoadingUser } = useUser();
   const [reservations, setReservations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   // Obtener reservas del usuario
   useEffect(() => {
@@ -62,9 +66,51 @@ export default function Reservations() {
     fetchUserRequests();
   }, [user, isLoadingUser]);
 
+  // Cerrar automáticamente el modal de éxito después de 1.5 segundos
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        setIsSuccess(false);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
+
   const handleReservationClick = (reservation) => {
     // Por ahora solo mostrar en consola, se puede agregar un modal después
     console.log("Reservación seleccionada:", reservation);
+  };
+
+  const handleCancelReservation = async (reservation) => {
+    if (!reservation || !reservation.id) {
+      setErrorMessages(["Error: No se pudo identificar la reservación"]);
+      return;
+    }
+
+    // Mostrar confirmación
+    const confirmed = window.confirm("¿Estás seguro de cancelar la solicitud?");
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.delete(`/rides/${reservation.id}/leave`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        // Remover la reservación de la lista
+        setReservations((prev) => prev.filter((r) => r.id !== reservation.id));
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error("Error cancelando reservación:", error);
+      const errorMessage = error.response?.data?.message || "Error al cancelar la reservación";
+      setErrorMessages([errorMessage]);
+    }
   };
 
   if (isLoadingUser || isLoading || !user) {
@@ -99,10 +145,25 @@ export default function Reservations() {
                 key={reservation.id}
                 reservation={reservation}
                 onOpen={handleReservationClick}
+                onCancel={handleCancelReservation}
               />
             ))}
           </div>
         </div>
+      )}
+
+      {/* Modales */}
+      {isSuccess && (
+        <SuccessModal
+          message="¡Reservación cancelada exitosamente!"
+          onClose={() => setIsSuccess(false)}
+        />
+      )}
+      {errorMessages.length > 0 && (
+        <ErrorModal
+          messages={errorMessages}
+          onClose={() => setErrorMessages([])}
+        />
       )}
     </div>
   );
