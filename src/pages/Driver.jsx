@@ -44,7 +44,7 @@ export default function BeDriver() {
       <TopButtons />
          
 
-      <div className="flex items-center ml-18 mt-4 gap-4">
+      <div className="flex items-center ml-8 lg:ml-18 mt-4 gap-4">
         <p className="text-[#FEF801] font-bold text-3xl">1.</p>
         <Button 
           variant="primary" 
@@ -55,9 +55,9 @@ export default function BeDriver() {
         </Button>
       </div>
 
-      <div className="flex items-center ml-18 mt-4 gap-4">
+      <div className="flex items-center ml-8 lg:ml-18 mt-4 gap-4">
         <p className="text-[#FEF801] font-bold text-3xl">2.</p>
-        <p className="text-white font-bold text-3xl">Crea un</p>
+        <p className="text-white font-bold text-2xl lg:text-3xl">Crea un</p>
         <Button 
           variant="primary"
           size="medium"
@@ -67,19 +67,26 @@ export default function BeDriver() {
         </Button>
       </div>
       
-      <div className="flex items-center ml-18 mt-4 gap-4">
-        <p className="text-[#FEF801] font-bold text-3xl">3.</p>
-        <p className="text-white font-bold text-3xl">Maneja seguro y no olvides</p>
-        <Button 
-          variant="primary"
-          size="medium"
-          onClick={() => handleDriverAction("/finalize-trip")}
-        > 
-          Finalizar tu viaje
-        </Button>
+     <div className="flex items-start ml-8 lg:ml-18 mt-4 gap-3">
+      <p className="text-[#FEF801] font-bold text-3xl leading-none lg:mt-3">3.</p>
+      <div className="flex flex-col lg:flex-row lg:items-center mt-1 lg:mt-0">
+        <p className="text-white font-bold text-2xl lg:text-3xl leading-none">Maneja seguro</p>
+        
+        <div className="flex flex-col lg:flex-row lg:items-center">
+          <p className="text-white font-bold text-2xl lg:text-3xl mt-2 lg:mt-0 lg:ml-3 leading-none">y no olvides</p>
+          <Button 
+            variant="primary"
+            size="medium"
+            onClick={() => handleDriverAction("/finalize-trip")}
+            className="-ml-3 mt-4 lg:mt-0 lg:ml-3"
+          >
+            Finalizar tu viaje
+          </Button>
+        </div>
       </div>
+    </div>
 
-      {/* Modal para cuando no tiene vehículo registrado */}
+      {/* Modal vehículo no registrado */}
       {showVehicleRequiredModal && (
         <ErrorModal
           messages={["¡Primero debes registrar tu vehículo!"]}

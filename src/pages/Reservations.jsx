@@ -78,7 +78,7 @@ export default function Reservations() {
   return (
     <div className="w-screen h-screen bg-black flex flex-col text-white font-inter overflow-y-auto py-8">
       <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-8 px-2">
-        <Tittle size="extraLarge" className="mb-0 inline-block ml-4 lg:ml-10">
+        <Tittle size="extraLarge" className="mb-0 inline-block ml-4  mt-20 lg:mt-6 lg:ml-10">
           Mis reservas
         </Tittle>
         <TopButtons />
