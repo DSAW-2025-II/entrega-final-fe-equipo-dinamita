@@ -37,7 +37,7 @@ export default function BeDriver() {
       <Tittle 
         variant="primary" 
         size="extraLarge" 
-        className="self-start ml-10 mt-6" > 
+        className="self-start ml-10 mt-20 lg:mt-6" > 
         Sé conductor
       </Tittle> 
 

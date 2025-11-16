@@ -71,6 +71,13 @@ export default function NewTrip() {
         <CreateTripCard onSuccess={handleSuccess} onError={handleError} />
       </div>
 
+      <button
+    className="text-[#FEF801] hover:underline cursor-pointer font-bold text-xl -ml-280 mb-15"
+    onClick={() => navigate("/home")}
+    style={{ textShadow: "0 0 6px rgba(0,0,0,0.8)" }}>
+        Volver
+    </button> 
+
     </div>
   );
 }

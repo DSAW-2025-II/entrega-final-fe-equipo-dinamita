@@ -273,8 +273,11 @@ export default function RegisterCar() {
   if (hasVehicle) {
     return (
       <div className="relative w-full min-h-screen bg-black flex flex-col items-center justify-center px-2 font-inter">
-        <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-8 px-2">
-          <Tittle size="extraLarge" className="mb-0 inline-block">Datos del vehículo</Tittle>
+        <div className="flex items-center justify-between mb-20">
+          <Tittle size="extraLarge" 
+          className="mb-0 inline-block mt-20">
+            Datos del buenaaa
+            </Tittle>
           <TopButtons />
         </div>
         
@@ -306,7 +309,7 @@ export default function RegisterCar() {
       </div>
 
       {/* Tarjetas alineadas tipo row */}
-      <div className="flex flex-col items-center lg:flex-row justify-center gap-y-4 lg:gap-x-2 w-full max-w-6xl mx-auto mb-4">
+      <div className="flex flex-col items-center lg:flex-row justify-center gap-y-10 lg:gap-x-2 w-full max-w-6xl mx-auto mb-4">
         {/* Tarjeta izquierda: Datos básicos vehículo */}
         <div className="bg-[#D2D1BE] rounded-[20px] shadow-lg flex flex-col items-center py-5 px-3 w-[90vw] max-w-[350px] mx-auto">
           <Tittle size="semi" className="bg-[#FEF801] px-9 py-2 mb-4 shadow-md text-black">PLACA</Tittle>

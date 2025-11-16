@@ -121,22 +121,15 @@ export default function Home() {
       </div>
     </div>
   ) : (
+    
     // Si es passenger, mostrar las tarjetas de viaje
     <div className="w-full max-w-6xl mx-auto px-2">
-<<<<<<< HEAD
-=======
-      {/* Contenedor de tarjetas */}
->>>>>>> 2f0a3bc57de19c124cff4a8c3f4cd3f22de659ed
       <div className="ml-8 mt-2 lg:-ml-4 lg:mt-4 mb-8">
         <TravelContainer />
       </div>
     </div>
   )}
+    </div> 
 
-  
-
-    </div>
- 
 );
-
-   }
+}
