@@ -29,7 +29,7 @@ const CreateTripCard = ({ onSuccess, onError }) => {
 
       try {
         const token = localStorage.getItem("token");
-        const response = await api.get(`/vehicles/${user.vehicleId}`, {
+        const response = await api.get(`/vehicle/${user.vehicleId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +94,7 @@ const CreateTripCard = ({ onSuccess, onError }) => {
       if (capacityNum <= 0) {
         newErrors.capacity = "¡Debe ser mayor que 0!";
       } else if (vehicleSeats !== null && capacityNum > vehicleSeats) {
-        newErrors.capacity = `¡No puedes ofrecer más puestos (${capacityNum}) de los que tiene tu vehículo (${vehicleSeats})!`;
+        newErrors.capacity = `¡Máximo ${vehicleSeats} puestos!`;
       }
     }
 

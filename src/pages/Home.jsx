@@ -58,7 +58,7 @@ export default function Home() {
   <Tittle 
     variant="primary" 
     size="extraLarge" 
-    className="self-start text-xl ml-8 mt-8 lg:text-3xl lg:ml-10 lg:mt-6" > 
+    className="self-start text-xl ml-8 mt-6 lg:text-3xl lg:ml-10 lg:mt-6" > 
     ¡Hola, {user.name}!
   </Tittle> 
     
@@ -124,6 +124,7 @@ export default function Home() {
     
     // Si es passenger, mostrar las tarjetas de viaje
     <div className="w-full max-w-6xl mx-auto px-2">
+      {/* Contenedor de tarjetas */}
       <div className="ml-8 mt-2 lg:-ml-4 lg:mt-4 mb-8">
         <TravelContainer />
       </div>
