@@ -6,6 +6,8 @@ import LoadingModal from "../components/LoadingModal";
 import InfoMyTrips from "../components/InfoMyTrips";
 import ErrorModal from "../components/ErrorModal";
 import SuccessModal from "../components/SuccessModal";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 import { useUser } from "../hooks/useUser";
 import api from "../api/axios";
 
@@ -17,6 +19,7 @@ export default function MyTrips() {
   const [isInfoMyTripsOpen, setIsInfoMyTripsOpen] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
+   const navigate = useNavigate();
 
   // 🔹 Manejar cuando se hace clic en una tarjeta de viaje
   const handleTravelClick = (trip) => {
@@ -156,6 +159,9 @@ export default function MyTrips() {
           Mis viajes
         </Tittle>
         <TopButtons />
+
+        
+
       </div>
 
       {/* Lista de viajes */}
@@ -170,6 +176,13 @@ export default function MyTrips() {
           <p className="text-black text-lg">
             No has creado ningún viaje todavía. ¡Crea tu primer viaje!
           </p>
+
+           <Button 
+              variant="primary"
+              size="medium"
+              onClick={() => navigate('/create-trip')}>
+              Crea un nuevo viaje
+          </Button>
         </div>
       ) : (
         <div className="w-full max-w-6xl mx-auto px-2">
@@ -197,6 +210,14 @@ export default function MyTrips() {
                     />
                   ))}
               </div>
+              <Button 
+                  variant="primary"
+                  size="medium"
+                  className="mt-5 ml-6 items-center"
+                  onClick={() => navigate("/finalize-trip")}
+                  >
+                  Finaliza tu viaje
+                </Button>
             </div>
           )}
 

@@ -15,7 +15,7 @@ return (
             <Paragraph
             variant="primary"
             size="extraLarge"
-            className="text-center mt-6"
+            className="text-center mt-20 lg:mt-6 !text-3xl lg:!text-5xl"
             >
             ¿Terminaste tu viaje?
             </Paragraph>
@@ -23,7 +23,7 @@ return (
             <Button
             variant="primary"
             size="extraLarge"
-            className="mt-10"
+            className="mt-8 !text-2xl lg:!text-3xl"
             onClick={() => navigate("/profile")}
             >
             Finalizar viaje

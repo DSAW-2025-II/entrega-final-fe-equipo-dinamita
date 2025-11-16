@@ -276,7 +276,7 @@ export default function RegisterCar() {
         <div className="flex items-center justify-between mb-20">
           <Tittle size="extraLarge" 
           className="mb-0 inline-block mt-20">
-            Datos del buenaaa
+            Datos del vehículo
             </Tittle>
           <TopButtons />
         </div>
@@ -304,7 +304,9 @@ export default function RegisterCar() {
 
       {/* Header: Título alineado izquierda, TopButtons a la derecha */}
       <div className="flex w-full max-w-6xl mx-auto items-center justify-between mb-1 px-2">
-        <Tittle size="extraLarge" className="mb-0 inline-block">Datos del vehículo</Tittle>
+        <Tittle size="extraLarge" 
+        className="mt-12 ml-5 lg:ml-0 lg:mt-0 lg:mb-0 inline-block">
+          Datos del vehículo</Tittle>
         <TopButtons />
       </div>
 
