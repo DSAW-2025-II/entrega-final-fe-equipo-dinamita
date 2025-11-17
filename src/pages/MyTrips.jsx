@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Tittle from "../components/Tittle";
 import TopButtons from "../components/TopButtons";
+import Button from "../components/Button";
 import DriverTravelCard from "../components/DriverTravelCard";
 import LoadingModal from "../components/LoadingModal";
 import InfoMyTrips from "../components/InfoMyTrips";
 import ErrorModal from "../components/ErrorModal";
 import SuccessModal from "../components/SuccessModal";
-import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
 import { useUser } from "../hooks/useUser";
 import api from "../api/axios";
 
 export default function MyTrips() {
+  const navigate = useNavigate();
   const { user, isLoading: isLoadingUser } = useUser();
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTravel, setSelectedTravel] = useState(null);
+  const [selectedTravel] = useState(null);
   const [isInfoMyTripsOpen, setIsInfoMyTripsOpen] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
-   const navigate = useNavigate();
-
-  // 🔹 Manejar cuando se hace clic en una tarjeta de viaje
-  const handleTravelClick = (trip) => {
-    setSelectedTravel(trip);
-    setIsInfoMyTripsOpen(true);
-  };
 
   // 🔹 Función para mapear los rides a trips
   const mapRidesToTrips = (rides) => {
@@ -68,7 +62,7 @@ export default function MyTrips() {
   };
 
   // 🔹 Obtener viajes del conductor
-  const fetchDriverRides = async () => {
+  const fetchDriverRides = useCallback(async () => {
     if (!user || isLoadingUser) return;
 
     setIsLoading(true);
@@ -89,7 +83,7 @@ export default function MyTrips() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, isLoadingUser]);
 
   // 🔹 Manejar cancelación de viaje
   const handleCancelTrip = async (trip) => {
@@ -118,7 +112,7 @@ export default function MyTrips() {
   //Obtener viajes del conductor
   useEffect(() => {
     fetchDriverRides();
-  }, [user, isLoadingUser]);
+  }, [fetchDriverRides]);
 
   //modal de éxito
   useEffect(() => {
@@ -173,7 +167,7 @@ export default function MyTrips() {
           >
             Mis viajes como conductor
           </Tittle>
-          <p className="text-black text-lg">
+          <p className="text-black text-lg mb-6">
             No has creado ningún viaje todavía. ¡Crea tu primer viaje!
           </p>
 
@@ -193,8 +187,19 @@ export default function MyTrips() {
             travel={selectedTravel}
           />
 
+          {/* Botón crear nuevo viaje */}
+          <div className="mb-6 ml-4 lg:ml-10">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() => navigate("/create-trip")}
+            >
+              Crear nuevo viaje
+            </Button>
+          </div>
+
           {/* Viajes activos */}
-          {trips.filter((trip) => trip.status !== "cancelled").length > 0 && (
+          {trips.filter((trip) => trip.status === "active").length > 0 && (
             <div className="mb-8">
               <Tittle size="large" className="mb-4 ml-4 lg:ml-10">
                 Mis viajes activos
@@ -202,6 +207,34 @@ export default function MyTrips() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-4 lg:ml-10">
                 {trips
                   .filter((trip) => trip.status !== "cancelled")
+                  .map((trip) => (
+                    <DriverTravelCard
+                      key={trip.id}
+                      trip={trip}
+                      onCancel={handleCancelTrip}
+                    />
+                  ))}
+              </div>
+              <Button 
+                  variant="primary"
+                  size="medium"
+                  className="mt-5 ml-6 items-center"
+                  onClick={() => navigate("/finalize-trip")}
+                  >
+                  Finaliza tu viaje
+                </Button>
+            </div>
+          )}
+
+          {/* Viajes finalizados */}
+          {trips.filter((trip) => trip.status === "finished").length > 0 && (
+            <div className="mb-8">
+              <Tittle size="large" className="mb-4 ml-4 lg:ml-10">
+                Mis viajes finalizados
+              </Tittle>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-4 lg:ml-10">
+                {trips
+                  .filter((trip) => trip.status === "finished")
                   .map((trip) => (
                     <DriverTravelCard
                       key={trip.id}

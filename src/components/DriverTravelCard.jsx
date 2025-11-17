@@ -33,6 +33,7 @@ export default function DriverTravelCard({ trip = {}, onCancel = () => {} }) {
   const departureTime = trip.departureTime || trip.hora;
   const passengers = trip.passengers || [];
   const isCancelled = trip.status === "cancelled";
+  const isFinished = trip.status === "finished";
 
   return (
     <div className="relative w-[303px] min-h-[400px] flex flex-col">
@@ -98,8 +99,8 @@ export default function DriverTravelCard({ trip = {}, onCancel = () => {} }) {
             </div>
           </div>
 
-          {/* Botón cancelar viaje - solo si no está cancelado */}
-          {!isCancelled && (
+          {/* Botón cancelar viaje - solo si está activo */}
+          {!isCancelled && !isFinished && (
             <div className="mt-auto pt-4">
               <Button
                 variant="danger"
@@ -109,6 +110,15 @@ export default function DriverTravelCard({ trip = {}, onCancel = () => {} }) {
               >
                 Cancelar viaje
               </Button>
+            </div>
+          )}
+          
+          {/* Indicador de viaje finalizado */}
+          {isFinished && (
+            <div className="mt-auto pt-4">
+              <div className="bg-green-500 text-white text-center py-2 px-4 rounded-full">
+                Viaje finalizado
+              </div>
             </div>
           )}
           
