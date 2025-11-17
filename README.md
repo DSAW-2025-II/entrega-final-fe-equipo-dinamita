@@ -1,6 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/jRa9bpsE)
 # Entrega final DSAW
-Este repositorio conntiene el proyecto final de la materia Desarrollo de Aplicaciones Web. Consiste en una aplicación de manejo y gestión de viajes para los estudiantes de la Universidad de La Sabana, permitiendo distintas funcionalidades para conductores y pasajeros.
+Este repositorio contiene el proyecto final de la materia Desarrollo de Aplicaciones Web. Consiste en una aplicación de manejo y gestión de viajes para los estudiantes de la Universidad de La Sabana, permitiendo distintas funcionalidades para conductores y pasajeros.
+
+De antemano, muchas gracias, profesor, por este grato semestre que pudimos compartir. Los conocimientos y herramientas que nos brindó han sido de gran valor y sabemos que serán fundamentales para nuestro crecimiento como futuros profesionales en ingeniería informática.
 
 ## [Acceso a la aplicación](https://entrega-final-fe-equipo-dinamita.vercel.app)
 ## [Link del backend](https://entrega-final-be-equipo-dinamita.vercel.app)
