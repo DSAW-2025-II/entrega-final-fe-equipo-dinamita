@@ -116,7 +116,7 @@ export default function MyVehicle() {
   }
 
   return (
-    <div className="w-screen h-screen bg-black flex flex-col text-white font-inter overflow-y-auto lg:overflow-y-hidden py-4 lg:py-8">
+    <div className="w-screen h-screen bg-black flex flex-col text-white font-inter overflow-y-auto py-4 lg:py-8">
       {isUploadingSOAT && <LoadingModal message="Actualizando SOAT..." />}
       {isSuccess && (
         <SuccessModal
@@ -141,7 +141,7 @@ export default function MyVehicle() {
       {vehicle ? (
         <div className="flex flex-col lg:flex-row justify-center gap-6 w-full max-w-6xl mx-auto px-4 -mt-3 lg:mt-0">
            {/* 🔹 Columna izquierda (nuevo diseño) */}
-          <div className="relative bg-[#1B1B1B] rounded-[28px] shadow-lg w-full max-w-xs lg:max-w-sm mx-auto pb-4 vehicle-shadow lg:ml-15">
+          <div className="relative bg-[#1B1B1B] rounded-[28px] shadow-lg w-full max-w-xs lg:max-w-sm mx-auto pb-4 lg:h-[460px] vehicle-shadow lg:ml-15" >
             <div className="flex justify-center items-center px-4 pb-6">
             {vehicle.photo ? (
                 <img
@@ -189,13 +189,13 @@ export default function MyVehicle() {
                 SOAT
               </Tittle>
             {/* Foto del SOAT */}
-            <div className="bg-[#D2D1BE] rounded-[20px] w-full max-w-xs mx-auto lg:max-w-[26rem] shadow-lg border-[#1B1B1B] border-20 flex flex-col items-center py-6 px-6">
+            <div className="bg-[#D2D1BE] rounded-[20px] w-full max-w-xs mx-auto lg:max-w-[26rem] shadow-lg border-[#1B1B1B] border-20 flex flex-col items-center py-3 px-6">
               
               {vehicle.soat ? (
                 <img
                   src={vehicle.soat}
                   alt="SOAT"
-                  className="w-full max-w-xs lg:max-w-md rounded-2xl shadow-md"
+                  className="w-full max-w-xs lg:max-w-md lg:max-h-[250px] rounded-2xl shadow-md"
                 />
               ) : (
                 <div className="w-full
