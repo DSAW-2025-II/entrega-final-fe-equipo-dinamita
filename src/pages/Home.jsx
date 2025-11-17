@@ -13,10 +13,25 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, isLoading, refreshUser } = useUser();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filters, setFilters] = useState({
+    capacity: "",
+    departurePoint: ""
+  });
   const toggleFilter = () => setOpenFilter((prev) => !prev);
   const previousUserIdRef = useRef(null);
 
   const isDriver = user?.currentRole === "driver";
+
+  // Limpiar filtros cuando se cierra el modal (solo si se cierra sin buscar)
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+    setFilters({ capacity: "", departurePoint: "" });
+  };
+
+  // Cerrar modal sin limpiar filtros (cuando se busca)
+  const handleCloseModal = () => {
+    setOpenFilter(false);
+  };
 
   
   // Detectar cuando cambia el userId y forzar recarga
@@ -68,13 +83,16 @@ export default function Home() {
       <Button 
         variant="primary" 
         size="extraLarge" 
-        className="self-start text-xl -ml-7 -mt-3 lg:text-3xl lg:ml-8 lg:mt-6 lg:mb-6" 
+        className="self-start text-xl ml-8 -mt-6 lg:text-3xl lg:ml-8 lg:mt-6 lg:mb-6 cursor-pointer" 
         onClick={toggleFilter}> 
         Filtrado por:
       </Button>
       <FilterModal 
         isOpen={openFilter} 
-        onClose={() => setOpenFilter(false)} 
+        onClose={handleCloseFilter}
+        onCloseWithoutClear={handleCloseModal}
+        filters={filters}
+        setFilters={setFilters}
       />
     </div>
   )}
@@ -126,7 +144,7 @@ export default function Home() {
     <div className="w-full max-w-6xl mx-auto px-2">
       {/* Contenedor de tarjetas */}
       <div className="ml-8 mt-2 lg:-ml-4 lg:mt-4 mb-8">
-        <TravelContainer />
+        <TravelContainer filters={filters} onCloseFilter={handleCloseModal} />
       </div>
     </div>
   )}

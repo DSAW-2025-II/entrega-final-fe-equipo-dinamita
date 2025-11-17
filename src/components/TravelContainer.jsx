@@ -5,9 +5,10 @@ import LoadingModal from "./LoadingModal";
 import api from "../api/axios";
 import { useUser } from "../hooks/useUser";
 
-export default function TravelContainer() {
+export default function TravelContainer({ filters = { capacity: "", departurePoint: "" }, onCloseFilter }) {
   const { user } = useUser();
   const [rides, setRides] = useState([]);
+  const [allRides, setAllRides] = useState([]); // Guardar todos los viajes sin filtrar
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
   const [isTravelModalOpen, setIsTravelModalOpen] = useState(false);
@@ -16,6 +17,10 @@ export default function TravelContainer() {
   const handleTravelClick = (trip) => {
     setSelectedTravel(trip);
     setIsTravelModalOpen(true);
+    // Cerrar el modal de filtro si está abierto
+    if (onCloseFilter) {
+      onCloseFilter();
+    }
   };
 
   // Obtener todos los rides disponibles
@@ -71,11 +76,13 @@ export default function TravelContainer() {
           // Filtrar viajes sin asientos disponibles
           mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
 
+          setAllRides(mappedRides); // Guardar todos los viajes
           setRides(mappedRides);
         }
       } catch (error) {
         console.error("Error obteniendo viajes:", error);
         setRides([]);
+        setAllRides([]);
       } finally {
         setIsLoading(false);
       }
@@ -83,6 +90,35 @@ export default function TravelContainer() {
 
     fetchAllRides();
   }, [user]);
+
+  // Aplicar filtros cuando cambien
+  useEffect(() => {
+    if (allRides.length === 0) {
+      setRides([]);
+      return;
+    }
+
+    let filteredRides = [...allRides];
+
+    // Filtrar por capacidad (asientos disponibles)
+    if (filters.capacity && filters.capacity !== "") {
+      const minCapacity = parseInt(filters.capacity);
+      if (!isNaN(minCapacity)) {
+        filteredRides = filteredRides.filter(ride => ride.availableSeats === minCapacity);
+      }
+    }
+
+    // Filtrar por punto de partida
+    if (filters.departurePoint && filters.departurePoint.trim() !== "") {
+      const searchTerm = filters.departurePoint.trim().toLowerCase();
+      filteredRides = filteredRides.filter(ride => {
+        const departurePoint = (ride.departurePoint || "").toLowerCase();
+        return departurePoint.includes(searchTerm);
+      });
+    }
+
+    setRides(filteredRides);
+  }, [filters, allRides]);
 
   if (isLoading) {
     return (
@@ -167,11 +203,13 @@ export default function TravelContainer() {
                 // Filtrar viajes sin asientos disponibles
                 mappedRides = mappedRides.filter(ride => ride.availableSeats > 0);
 
-                setRides(mappedRides);
+                setAllRides(mappedRides); // Guardar todos los viajes
+                // Los filtros se aplicarán automáticamente en el useEffect
               }
             } catch (error) {
               console.error("Error obteniendo viajes:", error);
               setRides([]);
+              setAllRides([]);
             } finally {
               setIsLoading(false);
             }

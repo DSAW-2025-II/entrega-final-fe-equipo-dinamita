@@ -141,7 +141,7 @@ export default function MyVehicle() {
       {vehicle ? (
         <div className="flex flex-col lg:flex-row justify-center gap-6 w-full max-w-6xl mx-auto px-4 -mt-3 lg:mt-0">
            {/* 🔹 Columna izquierda (nuevo diseño) */}
-          <div className="relative bg-[#1B1B1B] rounded-[28px] shadow-lg w-full max-w-xs lg:max-w-sm mx-auto pb-4 vehicle-shadow lg:ml-15" >
+          <div className="relative bg-[#1B1B1B] rounded-[28px] shadow-lg w-full max-w-xs lg:max-w-sm mx-auto pb-4 vehicle-shadow lg:ml-15">
             <div className="flex justify-center items-center px-4 pb-6">
             {vehicle.photo ? (
                 <img
@@ -186,7 +186,7 @@ export default function MyVehicle() {
             <Tittle 
              size="semi"
              className="mb-1 lg:mb-4 mt-7 lg:mt-0 shadow-md text-xl lg:text-3xl text-center ">
-                Tu SOAT
+                SOAT
               </Tittle>
             {/* Foto del SOAT */}
             <div className="bg-[#D2D1BE] rounded-[20px] w-full max-w-xs mx-auto lg:max-w-[26rem] shadow-lg border-[#1B1B1B] border-20 flex flex-col items-center py-6 px-6">

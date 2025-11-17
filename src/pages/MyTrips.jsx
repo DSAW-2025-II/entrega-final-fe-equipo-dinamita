@@ -187,16 +187,18 @@ export default function MyTrips() {
             travel={selectedTravel}
           />
 
-          {/* Botón crear nuevo viaje */}
-          <div className="mb-6 ml-4 lg:ml-10">
-            <Button
-              variant="primary"
-              size="medium"
-              onClick={() => navigate("/create-trip")}
-            >
-              Crear nuevo viaje
-            </Button>
-          </div>
+          {/* Botón crear nuevo viaje - solo mostrar si no hay viajes activos */}
+          {trips.filter((trip) => trip.status === "active").length === 0 && (
+            <div className="mb-6 ml-4 lg:ml-10">
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={() => navigate("/create-trip")}
+              >
+                Crear nuevo viaje
+              </Button>
+            </div>
+          )}
 
           {/* Viajes activos */}
           {trips.filter((trip) => trip.status === "active").length > 0 && (
