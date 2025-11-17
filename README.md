@@ -4,8 +4,8 @@ Este repositorio contiene el proyecto final de la materia Desarrollo de Aplicaci
 
 De antemano, muchas gracias, profesor, por este grato semestre que pudimos compartir. Los conocimientos y herramientas que nos brindó han sido de gran valor y sabemos que serán fundamentales para nuestro crecimiento como futuros profesionales en ingeniería informática.
 
-## [Acceso a la aplicación](https://entrega-final-fe-equipo-dinamita.vercel.app)
-## [Link del backend](https://entrega-final-be-equipo-dinamita.vercel.app)
+## URL Frontend: [Frontend](https://entrega-final-fe-equipo-dinamita.vercel.app)
+## URL Backend: [Backend](https://entrega-final-be-equipo-dinamita.vercel.app)
 ## Nombre estudiante 1: 
 👩🏻‍🎓 Karol Briyith Esquivel Peña - 343927
 ## Nombre estudiante 2:
